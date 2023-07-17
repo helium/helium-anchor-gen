@@ -13,10 +13,6 @@ members = [
     "programs/*"
 ]
 
-[features]
-default = ["no-entrypoint"]
-no-entrypoint = []
-
 [workspace.dependencies]
 anchor-gen = "0"
 anchor-lang = ">=0.20"
