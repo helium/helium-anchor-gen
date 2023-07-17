@@ -1,0 +1,38 @@
+[package]
+name = "helium-anchor-gen"
+version = "0.1.0"
+edition = "2021"
+authors = ["Louis Thiery <thiery.louis@gmail.com>"]
+license = "Apache-2.0"
+
+[lib]
+path = "src/lib.rs"
+
+[workspace]
+members = [
+    "programs/*"
+]
+
+[features]
+default = ["no-entrypoint"]
+no-entrypoint = []
+
+[workspace.dependencies]
+anchor-gen = "0"
+anchor-lang = ">=0.20"
+
+[dependencies]
+anchor-gen = { workspace = true }
+anchor-lang = { workspace = true }
+circuit-breaker = { path = "programs/circuit-breaker" }
+data-credits = { path = "programs/data-credits" }
+fanout = { path = "programs/fanout" }
+helium-entity-manager = { path = "programs/helium-entity-manager" }
+helium-sub-daos = { path = "programs/helium-sub-daos" }
+lazy-distributor = { path = "programs/lazy-distributor" }
+lazy-transactions = { path = "programs/lazy-transactions" }
+mobile-entity-manager = { path = "programs/mobile-entity-manager" }
+price-oracle = { path = "programs/price-oracle" }
+rewards-oracle = { path = "programs/rewards-oracle" }
+treasury-management = { path = "programs/treasury-management" }
+voter-stake-registry = { path = "programs/voter-stake-registry" }

@@ -1,0 +1,15 @@
+[package]
+name = "lazy-distributor"
+version = "0.1.0"
+edition = "2021"
+authors = ["Louis Thiery <thiery.louis@gmail.com>"]
+license = "Apache-2.0"
+publish = false
+
+[features]
+default = ["no-entrypoint"]
+no-entrypoint = []
+
+[dependencies]
+anchor-gen = { workspace = true }
+anchor-lang = { workspace = true }
