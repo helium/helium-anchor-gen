@@ -621,7 +621,7 @@
       }
     },
     {
-      "name": "Account",
+      "name": "SplAccount",
       "type": {
         "kind": "struct",
         "fields": [
