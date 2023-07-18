@@ -1,3 +1,6 @@
+// re-export anchor_lang
+pub use anchor_lang;
+
 pub use circuit_breaker;
 pub use data_credits;
 pub use fanout;
