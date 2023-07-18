@@ -11,6 +11,5 @@ pub use lazy_transactions;
 pub use mobile_entity_manager;
 pub use price_oracle;
 pub use rewards_oracle;
-pub use spl_token;
 pub use treasury_management;
 pub mod voter_stake_registry;
