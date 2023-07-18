@@ -34,7 +34,7 @@ impl PositionV0Trait for PositionV0 {
     ///
     /// For each cliff-locked token, the vote weight is:
     ///
-    /// ```
+    /// ```ignore
     ///    voting_power = baseline_vote_weight
     ///                   + lockup_duration_factor * max_extra_lockup_vote_weight
     /// ```
