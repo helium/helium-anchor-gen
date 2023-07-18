@@ -30,5 +30,6 @@ lazy-transactions = { path = "programs/lazy-transactions" }
 mobile-entity-manager = { path = "programs/mobile-entity-manager" }
 price-oracle = { path = "programs/price-oracle" }
 rewards-oracle = { path = "programs/rewards-oracle" }
+spl-token = { path = "programs/spl-token" }
 treasury-management = { path = "programs/treasury-management" }
 voter-stake-registry = { path = "programs/voter-stake-registry" }
