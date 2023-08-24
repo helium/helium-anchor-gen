@@ -1,5 +1,5 @@
 {
-  "version": "0.0.12",
+  "version": "0.0.15",
   "name": "helium_sub_daos",
   "instructions": [
     {
@@ -2043,6 +2043,51 @@
         }
       ],
       "args": []
+    },
+    {
+      "name": "trackDcOnboardingFeesV0",
+      "accounts": [
+        {
+          "name": "hemAuth",
+          "isMut": false,
+          "isSigner": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "rewardable_entity_config"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "SubDaoV0",
+                "path": "sub_dao"
+              },
+              {
+                "kind": "arg",
+                "type": {
+                  "defined": "TrackDcOnboardingFeesArgsV0"
+                },
+                "path": "args.symbol"
+              }
+            ]
+          }
+        },
+        {
+          "name": "subDao",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "TrackDcOnboardingFeesArgsV0"
+          }
+        }
+      ]
     }
   ],
   "accounts": [
@@ -2349,6 +2394,14 @@
           {
             "name": "onboardingDataOnlyDcFee",
             "type": "u64"
+          },
+          {
+            "name": "dcOnboardingFeesPaid",
+            "type": "u64"
+          },
+          {
+            "name": "activeDeviceAuthority",
+            "type": "publicKey"
           }
         ]
       }
@@ -2512,6 +2565,10 @@
           {
             "name": "onboardingDataOnlyDcFee",
             "type": "u64"
+          },
+          {
+            "name": "activeDeviceAuthority",
+            "type": "publicKey"
           }
         ]
       }
@@ -2552,6 +2609,26 @@
           {
             "name": "bump",
             "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TrackDcOnboardingFeesArgsV0",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "add",
+            "type": "bool"
+          },
+          {
+            "name": "symbol",
+            "type": "string"
           }
         ]
       }
@@ -2657,6 +2734,12 @@
             "name": "onboardingDataOnlyDcFee",
             "type": {
               "option": "u64"
+            }
+          },
+          {
+            "name": "activeDeviceAuthority",
+            "type": {
+              "option": "publicKey"
             }
           }
         ]

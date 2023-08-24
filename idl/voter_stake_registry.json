@@ -1,5 +1,5 @@
 {
-  "version": "0.0.6",
+  "version": "0.0.7",
   "name": "voter_stake_registry",
   "instructions": [
     {
@@ -1235,61 +1235,299 @@
         }
       ],
       "args": []
+    },
+    {
+      "name": "voteV0",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "marker",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "marker"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Mint",
+                "path": "mint"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "ProposalV0",
+                "path": "proposal"
+              }
+            ]
+          }
+        },
+        {
+          "name": "registrar",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "voter",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "position",
+          "isMut": true,
+          "isSigner": false,
+          "relations": [
+            "mint",
+            "registrar"
+          ]
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "proposal",
+          "isMut": true,
+          "isSigner": false,
+          "relations": [
+            "proposal_config"
+          ]
+        },
+        {
+          "name": "proposalConfig",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "on_vote_hook",
+            "state_controller"
+          ]
+        },
+        {
+          "name": "stateController",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "onVoteHook",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "proposalProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "VoteArgsV0"
+          }
+        }
+      ]
+    },
+    {
+      "name": "relinquishVoteV1",
+      "accounts": [
+        {
+          "name": "refund",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Account to receive sol refund if marker is closed"
+          ]
+        },
+        {
+          "name": "marker",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "marker"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Mint",
+                "path": "mint"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "ProposalV0",
+                "path": "proposal"
+              }
+            ]
+          },
+          "relations": [
+            "registrar",
+            "mint"
+          ]
+        },
+        {
+          "name": "registrar",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "voter",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "position",
+          "isMut": true,
+          "isSigner": false,
+          "relations": [
+            "mint",
+            "registrar"
+          ]
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "proposal",
+          "isMut": true,
+          "isSigner": false,
+          "relations": [
+            "proposal_config"
+          ]
+        },
+        {
+          "name": "proposalConfig",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "on_vote_hook",
+            "state_controller"
+          ]
+        },
+        {
+          "name": "stateController",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "onVoteHook",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "proposalProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "RelinquishVoteArgsV1"
+          }
+        }
+      ]
     }
   ],
   "accounts": [
     {
+      "name": "VoteMarkerV0",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "voter",
+            "type": "publicKey"
+          },
+          {
+            "name": "registrar",
+            "type": "publicKey"
+          },
+          {
+            "name": "proposal",
+            "type": "publicKey"
+          },
+          {
+            "name": "mint",
+            "type": "publicKey"
+          },
+          {
+            "name": "choices",
+            "type": {
+              "vec": "u16"
+            }
+          },
+          {
+            "name": "weight",
+            "type": "u128"
+          },
+          {
+            "name": "bumpSeed",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
       "name": "MaxVoterWeightRecord",
-      "docs": [
-        "MaxVoterWeightRecord account as defined in spl-governance-addin-api",
-        "It's redefined here without account_discriminator for Anchor to treat it as native account",
-        "",
-        "The account is used as an api interface to provide max voting power to the governance program from external addin contracts"
-      ],
       "type": {
         "kind": "struct",
         "fields": [
           {
             "name": "realm",
-            "docs": [
-              "The Realm the MaxVoterWeightRecord belongs to"
-            ],
             "type": "publicKey"
           },
           {
             "name": "governingTokenMint",
-            "docs": [
-              "Governing Token Mint the MaxVoterWeightRecord is associated with",
-              "Note: The addin can take deposits of any tokens and is not restricted to the community or council tokens only"
-            ],
             "type": "publicKey"
           },
           {
             "name": "maxVoterWeight",
-            "docs": [
-              "Max voter weight",
-              "The max voter weight provided by the addin for the given realm and governing_token_mint"
-            ],
             "type": "u64"
           },
           {
             "name": "maxVoterWeightExpiry",
-            "docs": [
-              "The slot when the max voting weight expires",
-              "It should be set to None if the weight never expires",
-              "If the max vote weight decays with time, for example for time locked based weights, then the expiry must be set",
-              "As a pattern Revise instruction to update the max weight should be invoked before governance instruction within the same transaction",
-              "and the expiry set to the current slot to provide up to date weight"
-            ],
             "type": {
               "option": "u64"
             }
           },
           {
             "name": "reserved",
-            "docs": [
-              "Reserved space for future versions"
-            ],
             "type": {
               "array": [
                 "u8",
@@ -1302,34 +1540,19 @@
     },
     {
       "name": "NftVoteRecord",
-      "docs": [
-        "Vote record indicating the given NFT voted on the Proposal",
-        "The PDA of the record is [\"nft-vote-record\",proposal,nft_mint]",
-        "It guarantees uniques and ensures the same NFT can't vote twice"
-      ],
       "type": {
         "kind": "struct",
         "fields": [
           {
             "name": "proposal",
-            "docs": [
-              "Proposal which was voted on"
-            ],
             "type": "publicKey"
           },
           {
             "name": "nftMint",
-            "docs": [
-              "The mint of the NFT which was used for the vote"
-            ],
             "type": "publicKey"
           },
           {
             "name": "governingTokenOwner",
-            "docs": [
-              "The voter who casted this vote",
-              "It's a Realm member pubkey corresponding to TokenOwnerRecord.governing_token_owner"
-            ],
             "type": "publicKey"
           }
         ]
@@ -1356,13 +1579,6 @@
           },
           {
             "name": "amountDepositedNative",
-            "docs": [
-              "Amount in deposited, in native currency. Withdraws of vested tokens",
-              "directly reduce this amount.",
-              "",
-              "This directly tracks the total amount added by the user. They may",
-              "never withdraw more than this amount."
-            ],
             "type": "u64"
           },
           {
@@ -1380,15 +1596,16 @@
           {
             "name": "bumpSeed",
             "type": "u8"
+          },
+          {
+            "name": "voteController",
+            "type": "publicKey"
           }
         ]
       }
     },
     {
       "name": "Registrar",
-      "docs": [
-        "Instance of a voting rights distributor."
-      ],
       "type": {
         "kind": "struct",
         "fields": [
@@ -1410,25 +1627,16 @@
           },
           {
             "name": "timeOffset",
-            "docs": [
-              "Debug only: time offset, to allow tests to move forward in time."
-            ],
             "type": "i64"
           },
           {
             "name": "positionUpdateAuthority",
-            "docs": [
-              "Allows a program to wrap updates to the position (transfer or reset lockup)"
-            ],
             "type": {
               "option": "publicKey"
             }
           },
           {
             "name": "collection",
-            "docs": [
-              "Storage for voting mints and their configuration."
-            ],
             "type": "publicKey"
           },
           {
@@ -1470,66 +1678,33 @@
     },
     {
       "name": "VoterWeightRecord",
-      "docs": [
-        "VoterWeightRecord account as defined in spl-governance-addin-api",
-        "It's redefined here without account_discriminator for Anchor to treat it as native account",
-        "",
-        "The account is used as an api interface to provide voting power to the governance program from external addin contracts"
-      ],
       "type": {
         "kind": "struct",
         "fields": [
           {
             "name": "realm",
-            "docs": [
-              "The Realm the VoterWeightRecord belongs to"
-            ],
             "type": "publicKey"
           },
           {
             "name": "governingTokenMint",
-            "docs": [
-              "Governing Token Mint the VoterWeightRecord is associated with",
-              "Note: The addin can take deposits of any tokens and is not restricted to the community or council tokens only"
-            ],
             "type": "publicKey"
           },
           {
             "name": "governingTokenOwner",
-            "docs": [
-              "The owner of the governing token and voter",
-              "This is the actual owner (voter) and corresponds to TokenOwnerRecord.governing_token_owner"
-            ],
             "type": "publicKey"
           },
           {
             "name": "voterWeight",
-            "docs": [
-              "Voter's weight",
-              "The weight of the voter provided by the addin for the given realm, governing_token_mint and governing_token_owner (voter)"
-            ],
             "type": "u64"
           },
           {
             "name": "voterWeightExpiry",
-            "docs": [
-              "The slot when the voting weight expires",
-              "It should be set to None if the weight never expires",
-              "If the voter weight decays with time, for example for time locked based weights, then the expiry must be set",
-              "As a common pattern Revise instruction to update the weight should be invoked before governance instruction within the same transaction",
-              "and the expiry set to the current slot to provide up to date weight"
-            ],
             "type": {
               "option": "u64"
             }
           },
           {
             "name": "weightAction",
-            "docs": [
-              "The governance action the voter's weight pertains to",
-              "It allows to provided voter's weight specific to the particular action the weight is evaluated for",
-              "When the action is provided then the governance program asserts the executing action is the same as specified by the addin"
-            ],
             "type": {
               "option": {
                 "defined": "VoterWeightAction"
@@ -1538,21 +1713,12 @@
           },
           {
             "name": "weightActionTarget",
-            "docs": [
-              "The target the voter's weight  action pertains to",
-              "It allows to provided voter's weight specific to the target the weight is evaluated for",
-              "For example when addin supplies weight to vote on a particular proposal then it must specify the proposal as the action target",
-              "When the target is provided then the governance program asserts the target is the same as specified by the addin"
-            ],
             "type": {
               "option": "publicKey"
             }
           },
           {
             "name": "reserved",
-            "docs": [
-              "Reserved space for future versions"
-            ],
             "type": {
               "array": [
                 "u8",
@@ -1662,6 +1828,18 @@
       }
     },
     {
+      "name": "RelinquishVoteArgsV1",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "choice",
+            "type": "u16"
+          }
+        ]
+      }
+    },
+    {
       "name": "ResetLockupArgsV0",
       "type": {
         "kind": "struct",
@@ -1710,6 +1888,18 @@
       }
     },
     {
+      "name": "VoteArgsV0",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "choice",
+            "type": "u16"
+          }
+        ]
+      }
+    },
+    {
       "name": "WithdrawArgsV0",
       "type": {
         "kind": "struct",
@@ -1728,29 +1918,14 @@
         "fields": [
           {
             "name": "startTs",
-            "docs": [
-              "Start of the lockup.",
-              "",
-              "Note, that if start_ts is in the future, the funds are nevertheless",
-              "locked up!",
-              "",
-              "Similarly vote power computations don't care about start_ts and always",
-              "assume the full interval from now to end_ts."
-            ],
             "type": "i64"
           },
           {
             "name": "endTs",
-            "docs": [
-              "End of the lockup."
-            ],
             "type": "i64"
           },
           {
             "name": "kind",
-            "docs": [
-              "Type of lockup."
-            ],
             "type": {
               "defined": "LockupKind"
             }
@@ -1760,73 +1935,35 @@
     },
     {
       "name": "VotingMintConfigV0",
-      "docs": [
-        "Exchange rate for an asset that can be used to mint voting rights.",
-        "",
-        "See documentation of configure_voting_mint for details on how",
-        "native token amounts convert to vote weight."
-      ],
       "type": {
         "kind": "struct",
         "fields": [
           {
             "name": "mint",
-            "docs": [
-              "Mint for this entry."
-            ],
             "type": "publicKey"
           },
           {
             "name": "baselineVoteWeightScaledFactor",
-            "docs": [
-              "Vote weight factor for all funds in the account, no matter if locked or not.",
-              "",
-              "In 1/SCALED_FACTOR_BASE units."
-            ],
             "type": "u64"
           },
           {
             "name": "maxExtraLockupVoteWeightScaledFactor",
-            "docs": [
-              "Maximum extra vote weight factor for lockups.",
-              "",
-              "This is the extra votes gained for lockups lasting lockup_saturation_secs or",
-              "longer. Shorter lockups receive only a fraction of the maximum extra vote weight,",
-              "based on lockup_time divided by lockup_saturation_secs.",
-              "",
-              "In 1/SCALED_FACTOR_BASE units."
-            ],
             "type": "u64"
           },
           {
             "name": "genesisVotePowerMultiplier",
-            "docs": [
-              "Genesis vote power multipliers for lockups.",
-              "",
-              "This is a multiplier applied to voting power for lockups created before",
-              "genesis_extra_lockup_expiration"
-            ],
             "type": "u8"
           },
           {
             "name": "genesisVotePowerMultiplierExpirationTs",
-            "docs": [
-              "Timestamp of when to stop applying the genesis_extra_lockup_vote_weight_scaled_factor"
-            ],
             "type": "i64"
           },
           {
             "name": "lockupSaturationSecs",
-            "docs": [
-              "Number of seconds of lockup needed to reach the maximum lockup bonus."
-            ],
             "type": "u64"
           },
           {
             "name": "digitShift",
-            "docs": [
-              "Number of digits to shift native amounts, applying a 10^digit_shift factor."
-            ],
             "type": "i8"
           }
         ]
@@ -1851,10 +1988,6 @@
     },
     {
       "name": "VoterWeightAction",
-      "docs": [
-        "VoterWeightAction enum as defined in spl-governance-addin-api",
-        "It's redefined here for Anchor to export it to IDL"
-      ],
       "type": {
         "kind": "enum",
         "variants": [
@@ -2167,6 +2300,14 @@
       "code": 6057,
       "name": "SamePosition",
       "msg": "Cannot transfer to the same position"
+    },
+    {
+      "code": 6058,
+      "name": "MaxChoicesExceeded"
+    },
+    {
+      "code": 6059,
+      "name": "NoVoteForThisChoice"
     }
   ]
 }
