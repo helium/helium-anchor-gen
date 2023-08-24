@@ -1,5 +1,5 @@
 {
-  "version": "0.0.1",
+  "version": "0.0.2",
   "name": "mobile_entity_manager",
   "instructions": [
     {
@@ -713,11 +713,6 @@
           "isSigner": false
         },
         {
-          "name": "programApproval",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
           "name": "treeConfig",
           "isMut": true,
           "isSigner": false,
@@ -778,11 +773,6 @@
         },
         {
           "name": "compressionProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "heliumEntityManagerProgram",
           "isMut": false,
           "isSigner": false
         }
