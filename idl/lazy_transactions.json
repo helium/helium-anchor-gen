@@ -1,5 +1,5 @@
 {
-  "version": "0.0.1",
+  "version": "0.2.0",
   "name": "lazy_transactions",
   "instructions": [
     {
@@ -37,6 +37,11 @@
           "isSigner": false
         },
         {
+          "name": "executedTransactions",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
@@ -61,10 +66,11 @@
         },
         {
           "name": "lazyTransactions",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false,
           "relations": [
-            "canopy"
+            "canopy",
+            "executed_transactions"
           ]
         },
         {
@@ -94,7 +100,7 @@
         },
         {
           "name": "block",
-          "isMut": true,
+          "isMut": false,
           "isSigner": false,
           "pda": {
             "seeds": [
@@ -123,6 +129,11 @@
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "executedTransactions",
+          "isMut": true,
+          "isSigner": false
         }
       ],
       "args": [
@@ -144,10 +155,11 @@
         },
         {
           "name": "lazyTransactions",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false,
           "relations": [
-            "authority"
+            "authority",
+            "executed_transactions"
           ]
         },
         {
@@ -181,6 +193,11 @@
               }
             ]
           }
+        },
+        {
+          "name": "executedTransactions",
+          "isMut": true,
+          "isSigner": false
         }
       ],
       "args": [
@@ -240,6 +257,11 @@
         },
         {
           "name": "canopy",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "executedTransactions",
           "isMut": true,
           "isSigner": false
         }
@@ -320,6 +342,10 @@
           {
             "name": "bumpSeed",
             "type": "u8"
+          },
+          {
+            "name": "executedTransactions",
+            "type": "publicKey"
           }
         ]
       }
@@ -340,7 +366,7 @@
         "fields": [
           {
             "name": "index",
-            "type": "u64"
+            "type": "u32"
           }
         ]
       }
@@ -499,6 +525,11 @@
       "code": 6003,
       "name": "CanopyLengthMismatch",
       "msg": "Invalid canopy length"
+    },
+    {
+      "code": 6004,
+      "name": "TransactionAlreadyExecuted",
+      "msg": "Transaction has already been executed"
     }
   ]
 }

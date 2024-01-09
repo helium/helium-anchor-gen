@@ -1,5 +1,5 @@
 {
-  "version": "0.0.15",
+  "version": "0.1.3",
   "name": "helium_sub_daos",
   "instructions": [
     {
@@ -92,41 +92,6 @@
         },
         {
           "name": "circuitBreakerProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "thread",
-          "isMut": true,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "thread"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "DaoV0",
-                "path": "dao"
-              },
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "issue_hst"
-              }
-            ],
-            "programId": {
-              "kind": "account",
-              "type": "publicKey",
-              "path": "clockwork"
-            }
-          }
-        },
-        {
-          "name": "clockwork",
           "isMut": false,
           "isSigner": false
         }
@@ -330,11 +295,6 @@
               }
             ]
           }
-        },
-        {
-          "name": "activeDeviceAggregator",
-          "isMut": false,
-          "isSigner": false
         },
         {
           "name": "systemProgram",
@@ -615,22 +575,8 @@
           "isMut": true,
           "isSigner": false,
           "relations": [
-            "dao",
-            "active_device_aggregator"
+            "dao"
           ]
-        },
-        {
-          "name": "activeDeviceAggregator",
-          "isMut": false,
-          "isSigner": false,
-          "relations": [
-            "history_buffer"
-          ]
-        },
-        {
-          "name": "historyBuffer",
-          "isMut": false,
-          "isSigner": false
         },
         {
           "name": "prevDaoEpochInfo",
@@ -897,10 +843,7 @@
             "defined": "IssueRewardsArgsV0"
           }
         }
-      ],
-      "returns": {
-        "defined": "ThreadResponse"
-      }
+      ]
     },
     {
       "name": "delegateV0",
@@ -1606,10 +1549,7 @@
             "defined": "IssueHstPoolArgsV0"
           }
         }
-      ],
-      "returns": {
-        "defined": "ThreadResponse"
-      }
+      ]
     },
     {
       "name": "resetLockupV0",
@@ -1705,344 +1645,6 @@
           }
         }
       ]
-    },
-    {
-      "name": "calculateKickoffV0",
-      "accounts": [
-        {
-          "name": "dao",
-          "isMut": false,
-          "isSigner": false,
-          "relations": [
-            "hnt_mint"
-          ]
-        },
-        {
-          "name": "subDao",
-          "isMut": false,
-          "isSigner": false,
-          "relations": [
-            "dao",
-            "active_device_aggregator"
-          ]
-        },
-        {
-          "name": "hntMint",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "activeDeviceAggregator",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "circuitBreakerProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [],
-      "returns": {
-        "defined": "ThreadResponse"
-      }
-    },
-    {
-      "name": "issueRewardsKickoffV0",
-      "accounts": [
-        {
-          "name": "dao",
-          "isMut": false,
-          "isSigner": false,
-          "relations": [
-            "hnt_mint"
-          ]
-        },
-        {
-          "name": "subDao",
-          "isMut": false,
-          "isSigner": false,
-          "relations": [
-            "dao",
-            "dnt_mint"
-          ]
-        },
-        {
-          "name": "hntMint",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "dntMint",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "circuitBreakerProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [],
-      "returns": {
-        "defined": "ThreadResponse"
-      }
-    },
-    {
-      "name": "issueHstKickoffV0",
-      "accounts": [
-        {
-          "name": "dao",
-          "isMut": false,
-          "isSigner": false,
-          "relations": [
-            "hnt_mint"
-          ]
-        },
-        {
-          "name": "hntMint",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "circuitBreakerProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [],
-      "returns": {
-        "defined": "ThreadResponse"
-      }
-    },
-    {
-      "name": "resetDaoThreadV0",
-      "accounts": [
-        {
-          "name": "authority",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
-          "name": "threadPayer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "dao",
-          "isMut": true,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "dao"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "DaoV0",
-                "path": "dao.hnt_mint"
-              }
-            ]
-          },
-          "relations": [
-            "authority"
-          ]
-        },
-        {
-          "name": "thread",
-          "isMut": true,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "thread"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "DaoV0",
-                "path": "dao"
-              },
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "issue_hst"
-              }
-            ],
-            "programId": {
-              "kind": "account",
-              "type": "publicKey",
-              "path": "clockwork"
-            }
-          }
-        },
-        {
-          "name": "clockwork",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "circuitBreakerProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "resetSubDaoThreadV0",
-      "accounts": [
-        {
-          "name": "authority",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "threadPayer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "dao",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "subDao",
-          "isMut": true,
-          "isSigner": false,
-          "relations": [
-            "authority",
-            "dao"
-          ]
-        },
-        {
-          "name": "calculateThread",
-          "isMut": true,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "thread"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "SubDaoV0",
-                "path": "sub_dao"
-              },
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "calculate"
-              }
-            ],
-            "programId": {
-              "kind": "account",
-              "type": "publicKey",
-              "path": "clockwork"
-            }
-          }
-        },
-        {
-          "name": "issueThread",
-          "isMut": true,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "thread"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "SubDaoV0",
-                "path": "sub_dao"
-              },
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "issue"
-              }
-            ],
-            "programId": {
-              "kind": "account",
-              "type": "publicKey",
-              "path": "clockwork"
-            }
-          }
-        },
-        {
-          "name": "clockwork",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "circuitBreakerProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
     },
     {
       "name": "trackDcOnboardingFeesV0",
@@ -2238,6 +1840,10 @@
           {
             "name": "bumpSeed",
             "type": "u8"
+          },
+          {
+            "name": "claimedEpochsBitmap",
+            "type": "u128"
           }
         ]
       }
@@ -2314,6 +1920,10 @@
           {
             "name": "initialized",
             "type": "bool"
+          },
+          {
+            "name": "dcOnboardingFeesPaid",
+            "type": "u64"
           }
         ]
       }
@@ -2360,7 +1970,7 @@
             "type": "publicKey"
           },
           {
-            "name": "activeDeviceAggregator",
+            "name": "deprecatedActiveDeviceAggregator",
             "type": "publicKey"
           },
           {
@@ -2713,12 +2323,6 @@
             }
           },
           {
-            "name": "activeDeviceAggregator",
-            "type": {
-              "option": "publicKey"
-            }
-          },
-          {
             "name": "registrar",
             "type": {
               "option": "publicKey"
@@ -2927,6 +2531,16 @@
       "code": 6014,
       "name": "PositionChangeWhileDelegated",
       "msg": "Cannot change a position while it is delegated"
+    },
+    {
+      "code": 6015,
+      "name": "EpochNotClosed",
+      "msg": "This epoch was not closed, cannot claim rewards."
+    },
+    {
+      "code": 6016,
+      "name": "NoDelegateEndingPosition",
+      "msg": "Cannot delegate on a position ending this epoch"
     }
   ]
 }

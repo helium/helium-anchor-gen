@@ -1,5 +1,5 @@
 {
-  "version": "0.1.4",
+  "version": "0.2.3",
   "name": "helium_entity_manager",
   "instructions": [
     {
@@ -85,6 +85,19 @@
         {
           "name": "subDao",
           "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "dnt_mint"
+          ]
+        },
+        {
+          "name": "dntMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "escrow",
+          "isMut": true,
           "isSigner": false
         },
         {
@@ -125,6 +138,16 @@
         },
         {
           "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
           "isMut": false,
           "isSigner": false
         }
@@ -464,11 +487,6 @@
         },
         {
           "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "rent",
           "isMut": false,
           "isSigner": false
         }
@@ -904,6 +922,176 @@
       ]
     },
     {
+      "name": "issueNotEmittedEntityV0",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "dao",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "entityCreator",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "entity_creator"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "DaoV0",
+                "path": "dao"
+              }
+            ]
+          }
+        },
+        {
+          "name": "keyToAsset",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "recipient",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "not_emitted"
+              }
+            ],
+            "programId": {
+              "kind": "account",
+              "type": "publicKey",
+              "path": "no_emit_program"
+            }
+          }
+        },
+        {
+          "name": "recipientAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "metadata",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "metadata"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "path": "token_metadata_program"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Mint",
+                "path": "mint"
+              }
+            ],
+            "programId": {
+              "kind": "account",
+              "type": "publicKey",
+              "path": "token_metadata_program"
+            }
+          }
+        },
+        {
+          "name": "masterEdition",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "metadata"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "path": "token_metadata_program"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Mint",
+                "path": "mint"
+              },
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "edition"
+              }
+            ],
+            "programId": {
+              "kind": "account",
+              "type": "publicKey",
+              "path": "token_metadata_program"
+            }
+          }
+        },
+        {
+          "name": "tokenMetadataProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "instructions",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "noEmitProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "issueIotOperationsFundV0",
       "accounts": [
         {
@@ -1046,11 +1234,6 @@
         },
         {
           "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "rent",
           "isMut": false,
           "isSigner": false
         }
@@ -1279,6 +1462,11 @@
           "isSigner": false
         },
         {
+          "name": "dntBurner",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "rewardableEntityConfig",
           "isMut": false,
           "isSigner": false,
@@ -1347,12 +1535,23 @@
           "isMut": true,
           "isSigner": false,
           "relations": [
-            "dao"
+            "dao",
+            "dnt_mint"
           ]
         },
         {
           "name": "dcMint",
           "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "dntMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "dntPrice",
+          "isMut": false,
           "isSigner": false
         },
         {
@@ -1427,6 +1626,11 @@
       "name": "updateRewardableEntityConfigV0",
       "accounts": [
         {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
           "name": "authority",
           "isMut": false,
           "isSigner": true
@@ -1438,6 +1642,11 @@
           "relations": [
             "authority"
           ]
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
         }
       ],
       "args": [
@@ -2119,11 +2328,6 @@
           "name": "associatedTokenProgram",
           "isMut": false,
           "isSigner": false
-        },
-        {
-          "name": "rent",
-          "isMut": false,
-          "isSigner": false
         }
       ],
       "args": [
@@ -2639,35 +2843,6 @@
       "args": []
     },
     {
-      "name": "tempRepairIotOperationsFund",
-      "accounts": [
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "authority",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
-          "name": "dao",
-          "isMut": false,
-          "isSigner": false,
-          "relations": [
-            "authority"
-          ]
-        },
-        {
-          "name": "keyToAsset",
-          "isMut": true,
-          "isSigner": false
-        }
-      ],
-      "args": []
-    },
-    {
       "name": "setEntityActiveV0",
       "accounts": [
         {
@@ -2710,102 +2885,6 @@
           }
         }
       ]
-    },
-    {
-      "name": "tempBackfillOnboardingFeesV0",
-      "accounts": [
-        {
-          "name": "activeDeviceAuthority",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
-          "name": "rewardableEntityConfig",
-          "isMut": false,
-          "isSigner": false,
-          "relations": [
-            "sub_dao"
-          ]
-        },
-        {
-          "name": "subDao",
-          "isMut": true,
-          "isSigner": false,
-          "relations": [
-            "active_device_authority",
-            "dao"
-          ]
-        },
-        {
-          "name": "dao",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "keyToAsset",
-          "isMut": false,
-          "isSigner": false,
-          "relations": [
-            "dao"
-          ]
-        },
-        {
-          "name": "iotInfo",
-          "isMut": true,
-          "isSigner": false
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "tempBackfillMobileInfoDataV0",
-      "accounts": [
-        {
-          "name": "authority",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
-          "name": "rewardableEntityConfig",
-          "isMut": false,
-          "isSigner": false,
-          "relations": [
-            "sub_dao"
-          ]
-        },
-        {
-          "name": "subDao",
-          "isMut": true,
-          "isSigner": false,
-          "relations": [
-            "authority"
-          ]
-        },
-        {
-          "name": "dao",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "keyToAsset",
-          "isMut": false,
-          "isSigner": false,
-          "relations": [
-            "dao"
-          ]
-        },
-        {
-          "name": "mobileInfo",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "heliumSubDaosProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
     },
     {
       "name": "tempPayMobileOnboardingFeeV0",
@@ -2917,97 +2996,6 @@
         }
       ],
       "args": []
-    },
-    {
-      "name": "tempUpdateIotOperationsFundMetadata",
-      "accounts": [
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "authority",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
-          "name": "dao",
-          "isMut": false,
-          "isSigner": false,
-          "relations": [
-            "authority"
-          ]
-        },
-        {
-          "name": "entityCreator",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "entity_creator"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "DaoV0",
-                "path": "dao"
-              }
-            ]
-          }
-        },
-        {
-          "name": "mint",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "metadata",
-          "isMut": true,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "metadata"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "token_metadata_program"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "Mint",
-                "path": "mint"
-              }
-            ],
-            "programId": {
-              "kind": "account",
-              "type": "publicKey",
-              "path": "token_metadata_program"
-            }
-          }
-        },
-        {
-          "name": "tokenMetadataProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "args",
-          "type": {
-            "defined": "TempUpdateIotOperationsFundMetadataArgs"
-          }
-        }
-      ]
     }
   ],
   "accounts": [
@@ -3037,6 +3025,10 @@
           {
             "name": "bumpSeed",
             "type": "u8"
+          },
+          {
+            "name": "stakingRequirement",
+            "type": "u64"
           }
         ]
       }
@@ -3283,6 +3275,12 @@
           {
             "name": "dcOnboardingFeePaid",
             "type": "u64"
+          },
+          {
+            "name": "deviceType",
+            "type": {
+              "defined": "MobileDeviceTypeV0"
+            }
           }
         ]
       }
@@ -3375,6 +3373,10 @@
             "type": {
               "defined": "ConfigSettingsV0"
             }
+          },
+          {
+            "name": "stakingRequirement",
+            "type": "u64"
           }
         ]
       }
@@ -3596,6 +3598,12 @@
             "type": {
               "option": "u64"
             }
+          },
+          {
+            "name": "deviceType",
+            "type": {
+              "defined": "MobileDeviceTypeV0"
+            }
           }
         ]
       }
@@ -3640,18 +3648,6 @@
           {
             "name": "maxBufferSize",
             "type": "u32"
-          }
-        ]
-      }
-    },
-    {
-      "name": "TempUpdateIotOperationsFundMetadataArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "metadataUrl",
-            "type": "string"
           }
         ]
       }
@@ -3812,6 +3808,86 @@
                 "defined": "ConfigSettingsV0"
               }
             }
+          },
+          {
+            "name": "stakingRequirement",
+            "type": {
+              "option": "u64"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "DeviceFeesV0",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "deviceType",
+            "type": {
+              "defined": "MobileDeviceTypeV0"
+            }
+          },
+          {
+            "name": "dcOnboardingFee",
+            "type": "u64"
+          },
+          {
+            "name": "locationStakingFee",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DeviceFeesV1",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "deviceType",
+            "type": {
+              "defined": "MobileDeviceTypeV0"
+            }
+          },
+          {
+            "name": "dcOnboardingFee",
+            "type": "u64"
+          },
+          {
+            "name": "locationStakingFee",
+            "type": "u64"
+          },
+          {
+            "name": "mobileOnboardingFeeUsd",
+            "type": "u64"
+          },
+          {
+            "name": "reserved",
+            "type": {
+              "array": [
+                "u64",
+                8
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "MobileDeviceTypeV0",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Cbrs"
+          },
+          {
+            "name": "WifiIndoor"
+          },
+          {
+            "name": "WifiOutdoor"
           }
         ]
       }
@@ -3852,6 +3928,32 @@
               {
                 "name": "dataonly_location_staking_fee",
                 "type": "u64"
+              }
+            ]
+          },
+          {
+            "name": "MobileConfigV1",
+            "fields": [
+              {
+                "name": "fees_by_device",
+                "type": {
+                  "vec": {
+                    "defined": "DeviceFeesV0"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "MobileConfigV2",
+            "fields": [
+              {
+                "name": "fees_by_device",
+                "type": {
+                  "vec": {
+                    "defined": "DeviceFeesV1"
+                  }
+                }
               }
             ]
           }
@@ -3943,6 +4045,16 @@
       "code": 6013,
       "name": "InvalidSymbol",
       "msg": "Invalid symbol, must be 'IOT' or 'MOBILE'"
+    },
+    {
+      "code": 6014,
+      "name": "InvalidDeviceType",
+      "msg": "Mobile device type not found"
+    },
+    {
+      "code": 6015,
+      "name": "NoOraclePrice",
+      "msg": "No mobile oracle price"
     }
   ]
 }

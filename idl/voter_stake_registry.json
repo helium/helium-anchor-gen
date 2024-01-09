@@ -1,5 +1,5 @@
 {
-  "version": "0.0.7",
+  "version": "0.2.5",
   "name": "voter_stake_registry",
   "instructions": [
     {
@@ -182,11 +182,6 @@
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
-        },
-        {
-          "name": "rent",
-          "isMut": false,
-          "isSigner": false
         }
       ],
       "args": [
@@ -302,7 +297,7 @@
       "accounts": [
         {
           "name": "registrar",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false,
           "relations": [
             "collection"
@@ -510,11 +505,6 @@
         },
         {
           "name": "tokenMetadataProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "rent",
           "isMut": false,
           "isSigner": false
         }
@@ -1462,6 +1452,56 @@
           }
         }
       ]
+    },
+    {
+      "name": "relinquishExpiredVoteV0",
+      "accounts": [
+        {
+          "name": "marker",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "marker"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "VoteMarkerV0",
+                "path": "marker.mint"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "ProposalV0",
+                "path": "proposal"
+              }
+            ]
+          },
+          "relations": [
+            "proposal"
+          ]
+        },
+        {
+          "name": "position",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "proposal",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
@@ -1499,6 +1539,13 @@
           {
             "name": "bumpSeed",
             "type": "u8"
+          },
+          {
+            "name": "relinquished",
+            "docs": [
+              "Whether this vote has been cleared on the position after proposal expireds"
+            ],
+            "type": "bool"
           }
         ]
       }
