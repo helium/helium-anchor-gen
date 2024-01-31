@@ -36,7 +36,6 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: .github/scripts/idl-update.sh ${{ matrix.program }}
 
-
       # if the idl download occurred, we trigger a build which generates new Rust code
       - name: Cargo Build
         id: cargo-build
