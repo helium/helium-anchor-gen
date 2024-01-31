@@ -31,6 +31,14 @@ function get_tags() {
   fi
 
   LIST=$(echo "$TAGS" | jq -r --arg P "$PROGRAM" '.[].name | select(startswith($P))')
+  # check jq was successful
+  status_code=$?
+  if [ $status_code -ne 0 ]; then
+    echo "${LIST} ${TAGS}"
+    exit 1
+  fi
+
+
   # protect against the case where there is only one tag and it contains a 'v' prefix to the version
   if [ $(echo "$LIST" | wc -l) -eq 1 ]; then
     # replace underscores with hyphens
