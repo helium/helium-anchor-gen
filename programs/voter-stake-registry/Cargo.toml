@@ -1,6 +1,6 @@
 [package]
 name = "voter-stake-registry"
-version = "0.3.0"
+version = "program-oter-stake-registry-0.3.0"
 edition = "2021"
 authors = ["Louis Thiery <thiery.louis@gmail.com>"]
 license = "Apache-2.0"
