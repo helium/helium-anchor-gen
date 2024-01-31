@@ -25,6 +25,7 @@ jobs:
           treasury_management,
           voter_stake_registry
         ]
+      max-parallel: 1
 
     steps:
       - uses: actions/checkout@v3
