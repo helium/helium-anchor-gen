@@ -39,12 +39,10 @@ jobs:
       # if the idl download occurred, we trigger a build which generates new Rust code
       - name: Cargo Build
         id: cargo-build
-        if: steps.update-idls.outputs == 'success'
         run: cargo build --verbose
 
       # creates a pull request with the updated idl
       - name: Create Pull Request
-        if: steps.cargo-build.outputs == 'success'
         uses: peter-evans/create-pull-request@v5
         with:
           commit-message: update idl
