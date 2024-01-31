@@ -100,13 +100,21 @@ function get_cargo_version() {
   echo "$CARGO_VERSION"
 }
 
+function random_delay() {
+  # Generate a random integer between 10 and 3276
+  random_int=$((RANDOM % (3276 - 10 + 1) + 10))
+  # Convert the random integer to a floating-point number between 0.1 and 1
+  random_float=$(echo "scale=1; $random_int / 3276" | bc)
+  sleep $random_float
+}
+
 P=$1
 # replace underscores with hyphens
 PREFIX=program-${P//_/-}
 PAGE=1
 while true; do
   TAG=$(get_tags "$PREFIX" "$PAGE")
-
+  random_delay
   #if tag exited with non-zero, exit
   status_code=$?
   if [ $status_code -ne 0 ]; then
