@@ -16,20 +16,21 @@ function get_tags() {
   PAGE=$2
   URL="https://api.github.com/repos/${OWNER}/${REPO}/tags?page=$PAGE"
   # sort alphabetically, reverse, and filter by program name
-  LIST=$(curl -s \
+  TAGS=$(curl -s \
     -H "Accept: application/vnd.github+json" \
     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
-    "$URL" \
-    | jq -r --arg P "$PROGRAM" '.[].name | select(startswith($P))')
+    "$URL")
+
 
   # check if curl command failed
   status_code=$?
   if [ $status_code -ne 0 ]; then
-    echo "curl+jq failed. bad token?"
+    echo "${TAGS}"
     exit 1
   fi
 
+  LIST=$(echo "$TAGS" | jq -r --arg P "$PROGRAM" '.[].name | select(startswith($P))')
   # protect against the case where there is only one tag and it contains a 'v' prefix to the version
   if [ $(echo "$LIST" | wc -l) -eq 1 ]; then
     # replace underscores with hyphens
@@ -97,6 +98,15 @@ PREFIX=program-${P//_/-}
 PAGE=1
 while true; do
   TAG=$(get_tags "$PREFIX" "$PAGE")
+
+  #if tag exited with non-zero, exit
+  status_code=$?
+  if [ $status_code -ne 0 ]; then
+    echo "Error getting tags"
+    echo "${TAG}"
+    exit 1
+  fi
+
   # the first page of tags with the tag will be the latest
   # since the tags endpoint sorts alphabetically
   if [ -n "$TAG" ]; then
