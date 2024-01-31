@@ -87,7 +87,7 @@ function update_idl() {
   VERSION=$(version_from_tag "$TAG" "$PREFIX")
   PROGRAM_DIR=${PROGRAM//_/-}
   sed -i -e "s/^version = \".*\"/version = \"${VERSION}\"/" "programs/$PROGRAM_DIR/Cargo.toml"
-  exit 0
+  echo "${TAG}"
 }
 
 function get_cargo_version() {
@@ -143,7 +143,7 @@ while true; do
     # if VERSION and CARGO_VERSION are different, update the JSON
     if [ "$VERSION" != "$CARGO_VERSION" ]; then
       update_idl "${P}" "${TAG}"
-      echo "${TAG}"
+      exit 0
     fi
     break
   fi
