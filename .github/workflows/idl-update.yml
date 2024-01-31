@@ -39,13 +39,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TAG=$(.github/scripts/idl-update.sh ${{ matrix.program }})
-          echo "$TAG"
+          echo "tag: ${TAG}"
           echo "TAG=${TAG}" >> "$GITHUB_ENV"
 
       # creates a pull request with the updated idl
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
-        if: env.TAG != ''
+        if: env.TAG != 'No updates found.'
         with:
           commit-message: update idl ${{ env.TAG }}
           title: ${{ env.TAG }} IDL
