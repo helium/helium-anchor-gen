@@ -16,7 +16,7 @@ jobs:
           fanout,
           helium_entity_manager,
           helium_sub_daos,
-          hexboosting,
+          #hexboosting,
           lazy_distributor,
           lazy_transactions,
           mobile_entity_manager,
