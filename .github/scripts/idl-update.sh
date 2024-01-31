@@ -108,11 +108,28 @@ function random_delay() {
   sleep $random_float
 }
 
+function check_rate_limit() {
+  RESPONSE=$(curl -L \
+    -H "Accept: application/vnd.github+json" \
+    -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+    -H "X-GitHub-Api-Version: 2022-11-28" \
+    https://api.github.com/rate_limit)
+
+  echo $("$RESPONSE" | jq -r '.resources.core.remaining')
+}
+
 P=$1
 # replace underscores with hyphens
 PREFIX=program-${P//_/-}
 PAGE=1
 while true; do
+  # check if rate limit is 0 remaining
+  REMAINING=$(check_rate_limit)
+  if [ "$REMAINING" -eq 0 ]; then
+    echo "Rate limit exceeded"
+    exit 1
+  fi
+
   TAG=$(get_tags "$PREFIX" "$PAGE")
   random_delay
   #if tag exited with non-zero, exit
