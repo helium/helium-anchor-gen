@@ -47,6 +47,6 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         if: env.TAG != 'No updates found.'
         with:
-          commit-message: update idl ${{ env.TAG }}
-          title: ${{ env.TAG }} IDL
-          branch: update-idl-${{ env.TAG }}
+          commit-message: "idl-update: ${{ env.TAG }}"
+          title: "idl-update: ${{ env.TAG }}"
+          branch: idl-update-${{ env.TAG }}
