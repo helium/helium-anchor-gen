@@ -16,7 +16,7 @@ function get_tags() {
   PAGE=$2
   URL="https://api.github.com/repos/${OWNER}/${REPO}/tags?page=$PAGE"
   # sort alphabetically, reverse, and filter by program name
-  TAGS=$(curl -s \
+  TAGS=$(curl -s -L \
     -H "Accept: application/vnd.github+json" \
     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
@@ -109,7 +109,7 @@ function random_delay() {
 }
 
 function check_rate_limit() {
-  RESPONSE=$(curl -L \
+  RESPONSE=$(curl -s -L \
     -H "Accept: application/vnd.github+json" \
     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
