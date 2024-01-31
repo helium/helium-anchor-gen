@@ -6,6 +6,7 @@ pub use data_credits;
 pub use fanout;
 pub use helium_entity_manager;
 pub mod helium_sub_daos;
+pub use hexboosting;
 pub use lazy_distributor;
 pub use lazy_transactions;
 pub use mobile_entity_manager;

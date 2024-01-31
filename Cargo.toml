@@ -25,6 +25,7 @@ data-credits = { path = "programs/data-credits" }
 fanout = { path = "programs/fanout" }
 helium-entity-manager = { path = "programs/helium-entity-manager" }
 helium-sub-daos = { path = "programs/helium-sub-daos" }
+hexboosting = { path = "programs/hexboosting" }
 lazy-distributor = { path = "programs/lazy-distributor" }
 lazy-transactions = { path = "programs/lazy-transactions" }
 mobile-entity-manager = { path = "programs/mobile-entity-manager" }
