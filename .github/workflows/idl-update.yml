@@ -46,3 +46,5 @@ jobs:
           commit-message: update idl
           title: Update IDLs
           branch: update-idls
+          token: ${{ secrets.WORKFLOW_TOKEN }}
+
