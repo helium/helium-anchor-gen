@@ -22,7 +22,6 @@ function get_tags() {
     -H "X-GitHub-Api-Version: 2022-11-28" \
     "$URL")
 
-
   # check if curl command failed
   status_code=$?
   if [ $status_code -ne 0 ]; then
