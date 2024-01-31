@@ -33,7 +33,7 @@ jobs:
       - name: Update IDLs
         id: update-idls
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: .github/scripts/idl-update.sh ${{ matrix.program }}
 
       # if the idl download occurred, we trigger a build which generates new Rust code
