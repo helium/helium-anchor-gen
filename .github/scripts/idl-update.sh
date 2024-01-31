@@ -144,10 +144,10 @@ while true; do
     if [ "$VERSION" != "$CARGO_VERSION" ]; then
       update_idl "${P}" "${TAG}"
       echo "${TAG}"
-      exit 0
     fi
     break
   fi
   # if tag is not found, increment page
   PAGE=$((PAGE+1))
 done
+echo "No updates found."
