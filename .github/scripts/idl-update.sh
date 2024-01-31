@@ -115,7 +115,7 @@ function check_rate_limit() {
     -H "X-GitHub-Api-Version: 2022-11-28" \
     https://api.github.com/rate_limit)
 
-  echo $("$RESPONSE" | jq -r '.resources.core.remaining')
+    echo "$RESPONSE" | jq -r '.rate.remaining'
 }
 
 P=$1
