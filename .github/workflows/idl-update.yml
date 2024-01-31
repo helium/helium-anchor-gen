@@ -39,7 +39,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TAG=$(.github/scripts/idl-update.sh ${{ matrix.program }})
-          echo $TAG
+          echo "$TAG"
           echo "TAG=${TAG}" >> "$GITHUB_ENV"
 
       # creates a pull request with the updated idl
