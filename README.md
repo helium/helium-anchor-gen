@@ -1,3 +1,5 @@
+[![Rust](https://github.com/lthiery/helium-anchor-gen/actions/workflows/rust.yml/badge.svg)](https://github.com/lthiery/helium-anchor-gen/actions/workflows/rust.yml)
+
 # helium-anchor-gen
 
 Generates a Rust CPI client for the Helium Program Library. This is intended to avoid the strict dependencies declared in the solana-program-library that gets inherited by the helium-program-library.

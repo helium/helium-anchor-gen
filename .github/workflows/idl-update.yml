@@ -1,0 +1,53 @@
+name: Update IDL
+on:
+  schedule:
+    # every 5 minutes
+    - cron:  '*/5 * * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        program: [ circuit_breaker,
+          data_credits,
+          fanout,
+          helium_entity_manager,
+          helium_sub_daos,
+          lazy_distributor,
+          lazy_transactions,
+          mobile_entity_manager,
+          no_emit,
+          price_oracle,
+          rewards_oracle,
+          treasury_management,
+          voter_stake_registry
+        ]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      # the script replaces the json file with a newly downloaded one
+      # and updates the version in Cargo.toml
+      - name: Update IDLs
+        id: update-idls
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: .github/scripts/idl-update.sh ${{ matrix.program }}
+
+
+      # if the idl download occurred, we trigger a build which generates new Rust code
+      - name: Cargo Build
+        id: cargo-build
+        if: steps.update-idls.outputs == 'success'
+        run: cargo build --verbose
+
+      # creates a pull request with the updated idl
+      - name: Create Pull Request
+        if: steps.cargo-build.outputs == 'success'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: update idl
+          title: Update IDLs
+          branch: update-idls
