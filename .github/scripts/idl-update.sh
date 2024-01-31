@@ -65,7 +65,7 @@ function update_idl() {
   # download the json idl file from the tags assets
   URL="https://github.com/${OWNER}/${REPO}/releases/download/${TAG}/${PROGRAM}.json"
 
-  curl -L \
+  curl -s -L \
     -o "idl/${PROGRAM}.json.tmp" \
     -H "Accept: application/vnd.github+json" \
     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
