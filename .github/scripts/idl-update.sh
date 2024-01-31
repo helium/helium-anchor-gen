@@ -115,7 +115,12 @@ function check_rate_limit() {
     -H "X-GitHub-Api-Version: 2022-11-28" \
     https://api.github.com/rate_limit)
 
-    echo "$RESPONSE" | jq -r '.rate.remaining'
+    REMAINING=$(echo "$RESPONSE" | jq -r '.rate.remaining')
+    if [ "$REMAINING" -eq 0 ]; then
+      RESET_TIME=$(echo "$RESPONSE" | jq -r '.rate.reset')
+      echo "Rate limit exceeded, reset at $RESET_TIME"
+      exit 1
+    fi
 }
 
 P=$1
@@ -123,10 +128,10 @@ P=$1
 PREFIX=program-${P//_/-}
 PAGE=1
 while true; do
-  # check if rate limit is 0 remaining
-  REMAINING=$(check_rate_limit)
-  if [ "$REMAINING" -eq 0 ]; then
-    echo "Rate limit exceeded"
+  # bail out early if we are rate limited.
+  check_rate_limit
+  status_code=$?
+  if [ $status_code -ne 0 ]; then
     exit 1
   fi
 
