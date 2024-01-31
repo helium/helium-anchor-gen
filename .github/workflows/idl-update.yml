@@ -1,8 +1,8 @@
 name: Update IDL
 on:
   schedule:
-    # every 5 minutes
-    - cron:  '*/5 * * * *'
+    # every hour
+    - cron:  '0 * * * *'
 
 jobs:
   build:
@@ -10,7 +10,8 @@ jobs:
 
     strategy:
       matrix:
-        program: [ circuit_breaker,
+        program: [
+          circuit_breaker,
           data_credits,
           fanout,
           helium_entity_manager,
@@ -19,12 +20,12 @@ jobs:
           lazy_distributor,
           lazy_transactions,
           mobile_entity_manager,
-          no_emit,
           price_oracle,
           rewards_oracle,
           treasury_management,
           voter_stake_registry
         ]
+      max-parallel: 1
 
     steps:
       - uses: actions/checkout@v3
@@ -35,17 +36,16 @@ jobs:
         id: update-idls
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: .github/scripts/idl-update.sh ${{ matrix.program }}
-
-      # if the idl download occurred, we trigger a build which generates new Rust code
-      - name: Cargo Build
-        id: cargo-build
-        run: cargo build --verbose
+        run: |
+          TAG=$(.github/scripts/idl-update.sh ${{ matrix.program }})
+          echo "tag: ${TAG}"
+          echo "TAG=${TAG}" >> "$GITHUB_ENV"
 
       # creates a pull request with the updated idl
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
+        if: env.TAG != 'No updates found.'
         with:
-          commit-message: update idl
-          title: Update IDLs
-          branch: update-idls
+          commit-message: "idl-update: ${{ env.TAG }}"
+          title: "idl-update: ${{ env.TAG }}"
+          branch: idl-update-${{ env.TAG }}
