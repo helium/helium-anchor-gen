@@ -10,20 +10,21 @@ jobs:
 
     strategy:
       matrix:
-        program: [ circuit_breaker,
-          data_credits,
-          fanout,
+        program: [
+          #circuit_breaker,
+          #data_credits,
+          #fanout,
           helium_entity_manager,
-          helium_sub_daos,
-          hexboosting,
-          lazy_distributor,
-          lazy_transactions,
-          mobile_entity_manager,
-          no_emit,
-          price_oracle,
-          rewards_oracle,
-          treasury_management,
-          voter_stake_registry
+          #helium_sub_daos,
+          hexboosting
+          #lazy_distributor,
+          #lazy_transactions,
+          #mobile_entity_manager,
+          #no_emit,
+          #price_oracle,
+          #rewards_oracle,
+          #treasury_management,
+          #voter_stake_registry
         ]
       max-parallel: 1
 
