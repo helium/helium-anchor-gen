@@ -16,12 +16,11 @@ function get_tags() {
   PAGE=$2
   URL="https://api.github.com/repos/${OWNER}/${REPO}/tags?page=$PAGE"
   # sort alphabetically, reverse, and filter by program name
-  TAGS=$(curl -s \
+  TAGS=$(curl -s -L \
     -H "Accept: application/vnd.github+json" \
     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
     "$URL")
-
 
   # check if curl command failed
   status_code=$?
@@ -63,7 +62,6 @@ function get_tags() {
 function update_idl() {
   PROGRAM=$1
   TAG=$2
-  echo "updating idl $PROGRAM to $TAG"
   # download the json idl file from the tags assets
   URL="https://github.com/${OWNER}/${REPO}/releases/download/${TAG}/${PROGRAM}.json"
 
@@ -100,12 +98,19 @@ function get_cargo_version() {
   echo "$CARGO_VERSION"
 }
 
-function random_delay() {
-  # Generate a random integer between 10 and 3276
-  random_int=$((RANDOM % (3276 - 10 + 1) + 10))
-  # Convert the random integer to a floating-point number between 0.1 and 1
-  random_float=$(echo "scale=1; $random_int / 3276" | bc)
-  sleep $random_float
+function check_rate_limit() {
+  RESPONSE=$(curl -s -L \
+    -H "Accept: application/vnd.github+json" \
+    -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+    -H "X-GitHub-Api-Version: 2022-11-28" \
+    https://api.github.com/rate_limit)
+
+    REMAINING=$(echo "$RESPONSE" | jq -r '.rate.remaining')
+    if [ "$REMAINING" -eq 0 ]; then
+      RESET_TIME=$(echo "$RESPONSE" | jq -r '.rate.reset')
+      echo "Rate limit exceeded, reset at $RESET_TIME"
+      exit 1
+    fi
 }
 
 P=$1
@@ -113,8 +118,14 @@ P=$1
 PREFIX=program-${P//_/-}
 PAGE=1
 while true; do
+  # bail out early if we are rate limited.
+  check_rate_limit
+  status_code=$?
+  if [ $status_code -ne 0 ]; then
+    exit 1
+  fi
+
   TAG=$(get_tags "$PREFIX" "$PAGE")
-  random_delay
   #if tag exited with non-zero, exit
   status_code=$?
   if [ $status_code -ne 0 ]; then
@@ -129,10 +140,11 @@ while true; do
     # extract the version from the name (eg program-data-credits-0.2.1 -> 0.2.1)
     VERSION=$(version_from_tag "$TAG" "$PREFIX")
     CARGO_VERSION=$(get_cargo_version "$P")
-    echo "Latest version of $P is $VERSION and Cargo.toml version is $CARGO_VERSION"
     # if VERSION and CARGO_VERSION are different, update the JSON
     if [ "$VERSION" != "$CARGO_VERSION" ]; then
       update_idl "${P}" "${TAG}"
+      echo "${TAG}"
+      exit 0
     fi
     break
   fi
