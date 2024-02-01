@@ -2,26 +2,28 @@
 
 # helium-anchor-gen
 
-Generates a Rust CPI client for the Helium Program Library. This is intended to avoid the strict dependencies declared in the solana-program-library that gets inherited by the helium-program-library.
+Generates a Rust CPI client for the Helium Program Library. This is intended to avoid the strict dependencies declared 
+in the solana-program-library that gets inherited by the helium-program-library.
 
 ## IDL Updates
 
-The files in the `idl` directory are output from build `helium-program-library`.
+There is a GitHub Action that runs every hour to check for updates to the IDL files in the `helium-program-library`. If
+there are updates, the action will create a PR to update the IDL files in this repository.
 
-With `anchor-cli 0.26`, run `anchor build` in the `helium-program-library`. The output from `target/idl` may be copied over to the `idl` directory here.
+If you want to modify them by hand locally, you can do so by running `anchor build` in the `helium-program-library` and
+copying the output from `target/idl` to the `idl` directory here.
 
-## Installing anchor-cli 0.26
 
-```
-sh -c "$(curl -sSfL https://release.solana.com/v1.17.15/install)"
-ln -s ~/.local/share/solana/install/active_release/bin/cargo-build-bpf ~/.cargo/bin/
-ln -s ~/.local/share/solana/install/active_release/bin/cargo-build-sbf ~/.cargo/bin/
-rustup toolchain install 1.70
-cargo +1.70-x86_64-unknown-linux-gnu install --bin anchor --git https://github.com/coral-xyz/anchor --tag v0.26.0 anchor-cli --force
-```
-
-## Other notes
+## Adding helper functions
 
 The crates under `programs` exist to generate the CPI crates. Do not add code there!
 
-For those programs that benefit from importing of some functions from `helium-program-library`, the CPI types are re-exported and the helpful functions are defined under `src`.
+For those programs that benefit from importing of some functions from `helium-program-library`, the CPI types are 
+re-exported and the helpful functions are defined under `src`.
+
+# Caveat
+
+The downside of this approach is that the types are duplicated across programs. Each program has a local definition for
+related types. This leads to identical types being defined in different programs. For example, `voter-stake-registry`
+defines `PositionV0` and `helium-sub-daos` does as well (instead of sharing the definition from VSR as it does when 
+importing HPL directly).
