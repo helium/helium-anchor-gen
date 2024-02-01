@@ -42,7 +42,7 @@ jobs:
               echo "Failed to update IDLs: ${TAG}"
               exit 1
           fi
-          echo "tag: ${TAG}"
+          echo "${TAG}"
           echo "TAG=${TAG}" >> "$GITHUB_ENV"
 
       # creates a pull request with the updated idl
