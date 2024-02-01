@@ -46,14 +46,13 @@ function get_tags() {
     VERSION=$(version_from_tag "$LIST" "PREFIX")
     # if the version contains a v prefix, return an empty string
     if [[ "$VERSION" =~ ^v.* ]]; then
-      echo ""
-      exit 0
+      LIST=""
     fi
   fi
 
   # in case any of the tags have a 'v' prefix, remove it
   for ((i=0; i<${#LIST[@]}; i++)); do
-    LIST[$i]=$(echo "${LIST[$i]}" | sed 's/^\(.*-\)v\(.*\)$/\1\2/')
+    LIST[$i]=$(echo "${LIST[$i]}" | sed 's/-v\([0-9]\)/-\1/')
   done
   # sort the list and return the top
   echo "${LIST[@]}" | tr ' ' '\n' | sort -r | head -n 1
