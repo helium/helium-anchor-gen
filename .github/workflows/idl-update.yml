@@ -38,6 +38,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TAG=$(.github/scripts/idl-update.sh ${{ matrix.program }})
+          if [ $? -ne 0 ]; then
+              echo "Failed to update IDLs: ${TAG}"
+              exit 1
+          fi
           echo "tag: ${TAG}"
           echo "TAG=${TAG}" >> "$GITHUB_ENV"
 
