@@ -21,7 +21,7 @@ The crates under `programs` exist to generate the CPI crates. Do not add code th
 For those programs that benefit from importing of some functions from `helium-program-library`, the CPI types are 
 re-exported and the helpful functions are defined under `src`.
 
-# Caveat
+## Caveat
 
 The downside of this approach is that the types are duplicated across programs. Each program has a local definition for
 related types. This leads to identical types being defined in different programs. For example, `voter-stake-registry`
