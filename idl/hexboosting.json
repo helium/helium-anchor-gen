@@ -1,5 +1,5 @@
 {
-  "version": "0.0.1",
+  "version": "0.0.2",
   "name": "hexboosting",
   "instructions": [
     {
@@ -142,6 +142,11 @@
           "isSigner": false
         },
         {
+          "name": "startAuthority",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
           "name": "priceOracle",
           "isMut": false,
           "isSigner": false
@@ -197,20 +202,10 @@
         {
           "name": "boostConfig",
           "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "carrier",
-          "isMut": false,
           "isSigner": false,
           "relations": [
-            "hexboost_authority"
+            "start_authority"
           ]
-        },
-        {
-          "name": "hexboostAuthority",
-          "isMut": false,
-          "isSigner": true
         },
         {
           "name": "boostedHex",
@@ -221,7 +216,14 @@
           ]
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "StartBoostArgsV0"
+          }
+        }
+      ]
     },
     {
       "name": "closeBoostV0",
@@ -249,6 +251,40 @@
         }
       ],
       "args": []
+    },
+    {
+      "name": "updateBoostConfigV0",
+      "accounts": [
+        {
+          "name": "subDao",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "authority"
+          ]
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "boostConfig",
+          "isMut": true,
+          "isSigner": false,
+          "relations": [
+            "sub_dao"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "UpdateBoostConfigArgsV0"
+          }
+        }
+      ]
     }
   ],
   "accounts": [
@@ -301,6 +337,13 @@
           {
             "name": "bumpSeed",
             "type": "u8"
+          },
+          {
+            "name": "startAuthority",
+            "docs": [
+              "Authority to start the hex"
+            ],
+            "type": "publicKey"
           }
         ]
       }
@@ -341,6 +384,10 @@
               "Each entry represents the boost multiplier for a given period"
             ],
             "type": "bytes"
+          },
+          {
+            "name": "version",
+            "type": "u32"
           }
         ]
       }
@@ -357,8 +404,8 @@
             "type": "u64"
           },
           {
-            "name": "startTs",
-            "type": "i64"
+            "name": "version",
+            "type": "u32"
           },
           {
             "name": "amounts",
@@ -415,6 +462,56 @@
           }
         ]
       }
+    },
+    {
+      "name": "StartBoostArgsV0",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "startTs",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UpdateBoostConfigArgsV0",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "startAuthority",
+            "type": {
+              "option": "publicKey"
+            }
+          },
+          {
+            "name": "rentReclaimAuthority",
+            "type": {
+              "option": "publicKey"
+            }
+          },
+          {
+            "name": "boostPrice",
+            "type": {
+              "option": "u64"
+            }
+          },
+          {
+            "name": "minimumPeriods",
+            "type": {
+              "option": "u16"
+            }
+          },
+          {
+            "name": "priceOracle",
+            "type": {
+              "option": "publicKey"
+            }
+          }
+        ]
+      }
     }
   ],
   "errors": [
@@ -432,6 +529,26 @@
       "code": 6002,
       "name": "MaxBoostExceeded",
       "msg": "Hex is already boosted the maximum amount of 256x"
+    },
+    {
+      "code": 6003,
+      "name": "InvalidVersion",
+      "msg": "Hexboost version has changed since this instruction was formed, transaction rejected for safety"
+    },
+    {
+      "code": 6004,
+      "name": "PythError",
+      "msg": "Error from pyth"
+    },
+    {
+      "code": 6005,
+      "name": "PythPriceNotFound",
+      "msg": "No pyth price found"
+    },
+    {
+      "code": 6006,
+      "name": "ArithmeticError",
+      "msg": "Error in arithmetic"
     }
   ]
 }
