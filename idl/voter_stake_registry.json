@@ -1,5 +1,5 @@
 {
-  "version": "0.2.5",
+  "version": "0.3.1",
   "name": "voter_stake_registry",
   "instructions": [
     {
@@ -236,61 +236,6 @@
           }
         }
       ]
-    },
-    {
-      "name": "updateMaxVoterWeightV0",
-      "accounts": [
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "registrar",
-          "isMut": false,
-          "isSigner": false,
-          "relations": [
-            "realm_governing_token_mint"
-          ]
-        },
-        {
-          "name": "realmGoverningTokenMint",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "maxVoterWeightRecord",
-          "isMut": true,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "max-voter-weight-record"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "Registrar",
-                "path": "registrar.realm"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "Registrar",
-                "path": "registrar.realm_governing_token_mint"
-              }
-            ]
-          }
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
     },
     {
       "name": "initializePositionV0",
@@ -872,75 +817,6 @@
       ]
     },
     {
-      "name": "updateVoterWeightRecordV0",
-      "accounts": [
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "registrar",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "voterWeightRecord",
-          "isMut": true,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "Registrar",
-                "path": "registrar"
-              },
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "voter-weight-record"
-              },
-              {
-                "kind": "arg",
-                "type": {
-                  "defined": "UpdateVoterWeightRecordArgsV0"
-                },
-                "path": "args.owner"
-              }
-            ]
-          }
-        },
-        {
-          "name": "voterTokenOwnerRecord",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "voterAuthority",
-          "isMut": false,
-          "isSigner": true,
-          "docs": [
-            "Authority of the voter",
-            "It can be either governing_token_owner or its delegate and must sign this instruction"
-          ]
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "args",
-          "type": {
-            "defined": "UpdateVoterWeightRecordArgsV0"
-          }
-        }
-      ]
-    },
-    {
       "name": "setTimeOffsetV0",
       "accounts": [
         {
@@ -961,78 +837,6 @@
         {
           "name": "timeOffset",
           "type": "i64"
-        }
-      ]
-    },
-    {
-      "name": "castVoteV0",
-      "accounts": [
-        {
-          "name": "registrar",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "voterWeightRecord",
-          "isMut": true,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "Registrar",
-                "path": "registrar"
-              },
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "voter-weight-record"
-              },
-              {
-                "kind": "arg",
-                "type": {
-                  "defined": "CastVoteArgsV0"
-                },
-                "path": "args.owner"
-              }
-            ]
-          }
-        },
-        {
-          "name": "voterTokenOwnerRecord",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "voterAuthority",
-          "isMut": false,
-          "isSigner": true,
-          "docs": [
-            "Authority of the voter who casts the vote",
-            "It can be either governing_token_owner or its delegate and must sign this instruction"
-          ]
-        },
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true,
-          "docs": [
-            "The account which pays for the transaction"
-          ]
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "args",
-          "type": {
-            "defined": "CastVoteArgsV0"
-          }
         }
       ]
     },
@@ -1502,6 +1306,50 @@
         }
       ],
       "args": []
+    },
+    {
+      "name": "adminCloseNftVoteRecord",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "voteRecord",
+          "isMut": true,
+          "isSigner": false,
+          "relations": [
+            "governing_token_owner"
+          ]
+        },
+        {
+          "name": "position",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "position"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "NftVoteRecord",
+                "path": "vote_record.nft_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "governingTokenOwner",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
@@ -1779,22 +1627,6 @@
   ],
   "types": [
     {
-      "name": "CastVoteArgsV0",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "proposal",
-            "type": "publicKey"
-          },
-          {
-            "name": "owner",
-            "type": "publicKey"
-          }
-        ]
-      }
-    },
-    {
       "name": "ConfigureVotingMintArgsV0",
       "type": {
         "kind": "struct",
@@ -1802,10 +1634,6 @@
           {
             "name": "idx",
             "type": "u16"
-          },
-          {
-            "name": "digitShift",
-            "type": "i8"
           },
           {
             "name": "baselineVoteWeightScaledFactor",
@@ -1917,24 +1745,6 @@
       }
     },
     {
-      "name": "UpdateVoterWeightRecordArgsV0",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "voterWeightAction",
-            "type": {
-              "defined": "VoterWeightAction"
-            }
-          },
-          {
-            "name": "owner",
-            "type": "publicKey"
-          }
-        ]
-      }
-    },
-    {
       "name": "VoteArgsV0",
       "type": {
         "kind": "struct",
@@ -2010,7 +1820,7 @@
             "type": "u64"
           },
           {
-            "name": "digitShift",
+            "name": "reserved",
             "type": "i8"
           }
         ]
