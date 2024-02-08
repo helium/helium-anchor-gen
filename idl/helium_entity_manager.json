@@ -1,5 +1,5 @@
 {
-  "version": "0.2.3",
+  "version": "0.2.4",
   "name": "helium_entity_manager",
   "instructions": [
     {
@@ -3901,19 +3901,19 @@
             "name": "IotConfig",
             "fields": [
               {
-                "name": "min_gain",
+                "name": "minGain",
                 "type": "i32"
               },
               {
-                "name": "max_gain",
+                "name": "maxGain",
                 "type": "i32"
               },
               {
-                "name": "full_location_staking_fee",
+                "name": "fullLocationStakingFee",
                 "type": "u64"
               },
               {
-                "name": "dataonly_location_staking_fee",
+                "name": "dataonlyLocationStakingFee",
                 "type": "u64"
               }
             ]
@@ -3922,11 +3922,11 @@
             "name": "MobileConfig",
             "fields": [
               {
-                "name": "full_location_staking_fee",
+                "name": "fullLocationStakingFee",
                 "type": "u64"
               },
               {
-                "name": "dataonly_location_staking_fee",
+                "name": "dataonlyLocationStakingFee",
                 "type": "u64"
               }
             ]
@@ -3935,7 +3935,7 @@
             "name": "MobileConfigV1",
             "fields": [
               {
-                "name": "fees_by_device",
+                "name": "feesByDevice",
                 "type": {
                   "vec": {
                     "defined": "DeviceFeesV0"
@@ -3948,7 +3948,7 @@
             "name": "MobileConfigV2",
             "fields": [
               {
-                "name": "fees_by_device",
+                "name": "feesByDevice",
                 "type": {
                   "vec": {
                     "defined": "DeviceFeesV1"
@@ -4053,8 +4053,23 @@
     },
     {
       "code": 6015,
-      "name": "NoOraclePrice",
-      "msg": "No mobile oracle price"
+      "name": "PythError",
+      "msg": "Error loading Pyth data"
+    },
+    {
+      "code": 6016,
+      "name": "PythPriceNotFound",
+      "msg": "Pyth price is not available"
+    },
+    {
+      "code": 6017,
+      "name": "PythPriceFeedStale",
+      "msg": "Pyth price is stale"
+    },
+    {
+      "code": 6018,
+      "name": "ArithmeticError",
+      "msg": "Arithmetic error"
     }
   ]
 }
