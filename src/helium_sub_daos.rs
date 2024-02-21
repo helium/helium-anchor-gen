@@ -1,4 +1,4 @@
-use crate::voter_stake_registry::{LockupTrait, PositionV0, VotingMintConfig, VotingMintConfigV0};
+use crate::voter_stake_registry::{LockupTrait, LockupKind as VsrLockUpKind, PositionV0, VotingMintConfig, VotingMintConfigV0};
 pub use ::helium_sub_daos::*;
 use anchor_lang::prelude::*;
 use std::cmp::min;
@@ -26,14 +26,14 @@ pub trait PrecisePosition {
     fn voting_power_precise_locked_precise(
         &self,
         curr_ts: i64,
-        max_locked_vote_weight: u64,
+        max_locked_vote_weight: u128,
         lockup_saturation_secs: u64,
     ) -> Result<u128>;
 
     fn voting_power_precise_cliff_precise(
         &self,
         curr_ts: i64,
-        max_locked_vote_weight: u64,
+        max_locked_vote_weight: u128,
         lockup_saturation_secs: u64,
     ) -> Result<u128>;
 }
@@ -44,10 +44,10 @@ impl PrecisePosition for PositionV0 {
         voting_mint_config: &VotingMintConfigV0,
         curr_ts: i64,
     ) -> Result<u128> {
-        let baseline_vote_weight =
-            (voting_mint_config.baseline_vote_weight(self.amount_deposited_native)? as u128)
-                .checked_mul(FALL_RATE_FACTOR)
-                .unwrap();
+        let baseline_vote_weight = (voting_mint_config
+            .baseline_vote_weight(self.amount_deposited_native)?)
+            .checked_mul(FALL_RATE_FACTOR)
+            .unwrap();
         let max_locked_vote_weight =
             voting_mint_config.max_extra_lockup_vote_weight(self.amount_deposited_native)?;
         let genesis_multiplier =
@@ -74,23 +74,21 @@ impl PrecisePosition for PositionV0 {
     fn voting_power_precise_locked_precise(
         &self,
         curr_ts: i64,
-        max_locked_vote_weight: u64,
+        max_locked_vote_weight: u128,
         lockup_saturation_secs: u64,
     ) -> Result<u128> {
-        use crate::voter_stake_registry::LockupKind;
-
         if self.lockup.expired(curr_ts) || (max_locked_vote_weight == 0) {
             return Ok(0);
         }
 
         match self.lockup.kind {
-            LockupKind::None => Ok(0),
-            LockupKind::Cliff => self.voting_power_precise_cliff_precise(
+            VsrLockUpKind::None => Ok(0),
+            VsrLockUpKind::Cliff => self.voting_power_precise_cliff_precise(
                 curr_ts,
                 max_locked_vote_weight,
                 lockup_saturation_secs,
             ),
-            LockupKind::Constant => self.voting_power_precise_cliff_precise(
+            VsrLockUpKind::Constant => self.voting_power_precise_cliff_precise(
                 curr_ts,
                 max_locked_vote_weight,
                 lockup_saturation_secs,
@@ -101,17 +99,19 @@ impl PrecisePosition for PositionV0 {
     fn voting_power_precise_cliff_precise(
         &self,
         curr_ts: i64,
-        max_locked_vote_weight: u64,
+        max_locked_vote_weight: u128,
         lockup_saturation_secs: u64,
     ) -> Result<u128> {
         let remaining = min(self.lockup.seconds_left(curr_ts), lockup_saturation_secs);
-        Ok((max_locked_vote_weight as u128)
-            .checked_mul(remaining as u128)
-            .unwrap()
-            .checked_mul(FALL_RATE_FACTOR)
-            .unwrap()
-            .checked_div(lockup_saturation_secs as u128)
-            .unwrap())
+        Ok(
+            (max_locked_vote_weight)
+                .checked_mul(remaining as u128)
+                .unwrap()
+                .checked_mul(FALL_RATE_FACTOR)
+                .unwrap()
+                .checked_div(lockup_saturation_secs as u128)
+                .unwrap(),
+        )
     }
 }
 
@@ -136,13 +136,12 @@ pub struct VehntInfo {
     pub end_vehnt_correction: u128,
     pub end_fall_rate_correction: u128,
 }
+
 pub fn caclulate_vhnt_info(
     curr_ts: i64,
     position: &PositionV0,
     voting_mint_config: &VotingMintConfigV0,
 ) -> Result<VehntInfo> {
-    use crate::voter_stake_registry::LockupKind;
-
     let vehnt_at_curr_ts = position.voting_power_precise(voting_mint_config, curr_ts)?;
 
     let has_genesis = position.genesis_end > curr_ts;
@@ -157,7 +156,7 @@ pub fn caclulate_vhnt_info(
                 .checked_sub(1)
                 .unwrap(),
         )
-        .unwrap()
+            .unwrap()
     } else {
         0
     };
@@ -169,7 +168,7 @@ pub fn caclulate_vhnt_info(
                 .checked_sub(position.genesis_end)
                 .unwrap(),
         )
-        .unwrap()
+            .unwrap()
     } else {
         position.lockup.seconds_left(curr_ts)
     };
@@ -195,7 +194,7 @@ pub fn caclulate_vhnt_info(
         vehnt_at_position_end,
         seconds_from_genesis_to_end,
     )
-    .unwrap();
+        .unwrap();
 
     let mut genesis_end_vehnt_correction = 0;
     let mut genesis_end_fall_rate_correction = 0;
@@ -203,7 +202,7 @@ pub fn caclulate_vhnt_info(
         let genesis_end_epoch_start_ts =
             i64::try_from(current_epoch(position.genesis_end)).unwrap() * EPOCH_LENGTH;
 
-        if matches!(position.lockup.kind, LockupKind::Cliff) {
+        if let VsrLockUpKind::Cliff = position.lockup.kind {
             genesis_end_fall_rate_correction = pre_genesis_end_fall_rate
                 .checked_sub(post_genesis_end_fall_rate)
                 .unwrap();
@@ -215,8 +214,12 @@ pub fn caclulate_vhnt_info(
         // So add that fall rate back in.
         // Only do this if the genesis end epoch isn't the same as the position end epoch.
         // If these are the same, then the full vehnt at epoch start is already being taken off.
-        if matches!(position.lockup.kind, LockupKind::Constant)
-            || current_epoch(position.genesis_end) != current_epoch(position.lockup.end_ts)
+        let constant = if let VsrLockUpKind::Constant = position.lockup.kind {
+            true
+        } else {
+            false
+        };
+        if constant || current_epoch(position.genesis_end) != current_epoch(position.lockup.end_ts)
         {
             // edge case, if the genesis end is _exactly_ the start of the epoch, getting the voting power at the epoch start
             // will not include the genesis. When this happens, we'll miss a vehnt correction
@@ -240,7 +243,7 @@ pub fn caclulate_vhnt_info(
                                         .checked_sub(genesis_end_epoch_start_ts)
                                         .unwrap(),
                                 )
-                                .unwrap(),
+                                    .unwrap(),
                             )
                             .unwrap(),
                     )
@@ -251,7 +254,7 @@ pub fn caclulate_vhnt_info(
 
     let mut end_fall_rate_correction = 0;
     let mut end_vehnt_correction = 0;
-    if matches!(position.lockup.kind, LockupKind::Cliff) {
+    if let VsrLockUpKind::Cliff = position.lockup.kind {
         let end_epoch_start_ts =
             i64::try_from(current_epoch(position.lockup.end_ts)).unwrap() * EPOCH_LENGTH;
         let vehnt_at_closing_epoch_start =
@@ -288,7 +291,7 @@ impl SubDaoEpochInfoV0Trait for SubDaoEpochInfoV0 {
     }
 }
 
-#[anchor_lang::error_code]
+#[error_code]
 pub enum ErrorCode {
     #[msg("The realloc increase was too large")]
     InvalidDataIncrease,
@@ -334,4 +337,10 @@ pub enum ErrorCode {
 
     #[msg("Cannot change a position while it is delegated")]
     PositionChangeWhileDelegated,
+
+    #[msg("This epoch was not closed, cannot claim rewards.")]
+    EpochNotClosed,
+
+    #[msg("Cannot delegate on a position ending this epoch")]
+    NoDelegateEndingPosition,
 }
