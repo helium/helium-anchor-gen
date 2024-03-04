@@ -1,5 +1,5 @@
 {
-  "version": "0.0.3",
+  "version": "0.0.5",
   "name": "hexboosting",
   "instructions": [
     {
@@ -549,6 +549,16 @@
       "code": 6006,
       "name": "ArithmeticError",
       "msg": "Error in arithmetic"
+    },
+    {
+      "code": 6007,
+      "name": "BoostPeriodOver",
+      "msg": "Cannot boost a period that is in progress or over"
+    },
+    {
+      "code": 6008,
+      "name": "NoEmptyPeriods",
+      "msg": "Cannot leave a gap in boost periods"
     }
   ]
 }
