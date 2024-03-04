@@ -58,6 +58,31 @@ function get_tags() {
   echo "${LIST[@]}" | tr ' ' '\n' | sort -r | head -n 1
 }
 
+function check_existing_pr() {
+  PROGRAM=$1
+  TAG=$2
+  PRS=$(curl -s -L \
+    -H "Accept: application/vnd.github+json" \
+    -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+    -H "X-GitHub-Api-Version: 2022-11-28" \
+    https://api.github.com/repos/${OWNER}/helium-anchor-gen/pulls?state=open)
+
+  status_code=$?
+  # if curl failed, exit
+  if [ $status_code -ne 0 ]; then
+    echo "Querying open PRs failed"
+    exit 1
+  fi
+  HAS_MATCH="false"
+  while read -r i; do
+    if [ "${i}" == "\"idl-update: program-${PROGRAM}-${TAG}\"" ]; then
+      HAS_MATCH="true"
+      break
+    fi
+  done < <(echo "${PRS}" | jq -c '.[].title')
+  echo $HAS_MATCH
+}
+
 function update_idl() {
   PROGRAM=$1
   TAG=$2
@@ -141,6 +166,11 @@ while true; do
     CARGO_VERSION=$(get_cargo_version "$P")
     # if VERSION and CARGO_VERSION are different, update the JSON
     if [ "$VERSION" != "$CARGO_VERSION" ]; then
+      HAS_MATCH=$(check_existing_pr "${P}" "${TAG}")
+      if [ "$HAS_MATCH" == "true" ]; then
+        echo "PR already exists for ${P} ${TAG}"
+        exit 0
+      fi
       update_idl "${P}" "${TAG}"
       exit 0
     fi
