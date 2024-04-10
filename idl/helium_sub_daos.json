@@ -1,5 +1,5 @@
 {
-  "version": "0.1.3",
+  "version": "0.1.5",
   "name": "helium_sub_daos",
   "instructions": [
     {
@@ -429,6 +429,61 @@
           "name": "args",
           "type": {
             "defined": "UpdateSubDaoArgsV0"
+          }
+        }
+      ]
+    },
+    {
+      "name": "tempUpdateSubDaoEpochInfo",
+      "accounts": [
+        {
+          "name": "subDaoEpochInfo",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "sub_dao_epoch_info"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "SubDaoV0",
+                "path": "sub_dao"
+              },
+              {
+                "kind": "arg",
+                "type": {
+                  "defined": "TempUpdateSubDaoEpochInfoArgs"
+                },
+                "path": "args.epoch"
+              }
+            ]
+          }
+        },
+        {
+          "name": "subDao",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "TempUpdateSubDaoEpochInfoArgs"
           }
         }
       ]
@@ -2200,6 +2255,30 @@
       "type": {
         "kind": "struct",
         "fields": [
+          {
+            "name": "epoch",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TempUpdateSubDaoEpochInfoArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "vehntInClosingPositions",
+            "type": {
+              "option": "u128"
+            }
+          },
+          {
+            "name": "fallRatesFromClosingPositions",
+            "type": {
+              "option": "u128"
+            }
+          },
           {
             "name": "epoch",
             "type": "u64"
