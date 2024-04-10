@@ -85,12 +85,13 @@ function check_existing_pr() {
 
 function update_idl() {
   PROGRAM=$1
+  JSON=${PROGRAM//-/_}
   TAG=$2
   # download the json idl file from the tags assets
-  URL="https://github.com/${OWNER}/${REPO}/releases/download/${TAG}/${PROGRAM}.json"
+  URL="https://github.com/${OWNER}/${REPO}/releases/download/${TAG}/${JSON}.json"
 
   curl -s -L \
-    -o "idl/${PROGRAM}.json.tmp" \
+    -o "idl/${JSON}.json.tmp" \
     -H "Accept: application/vnd.github+json" \
     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
@@ -103,7 +104,7 @@ function update_idl() {
     exit 1
   fi
   # otherwise, rename file
-  mv "idl/${PROGRAM}.json.tmp" "idl/${PROGRAM}.json"
+  mv "idl/${JSON}.json.tmp" "idl/${JSON}.json"
 
   # replace underscores with hyphens
   PREFIX=program-${P//_/-}
