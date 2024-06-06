@@ -214,11 +214,8 @@ pub fn caclulate_vhnt_info(
         // So add that fall rate back in.
         // Only do this if the genesis end epoch isn't the same as the position end epoch.
         // If these are the same, then the full vehnt at epoch start is already being taken off.
-        let constant = if let VsrLockUpKind::Constant = position.lockup.kind {
-            true
-        } else {
-            false
-        };
+        let constant = matches!(position.lockup.kind, VsrLockUpKind::Constant);
+
         if constant || current_epoch(position.genesis_end) != current_epoch(position.lockup.end_ts)
         {
             // edge case, if the genesis end is _exactly_ the start of the epoch, getting the voting power at the epoch start
