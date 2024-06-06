@@ -1,4 +1,6 @@
-use crate::voter_stake_registry::{LockupTrait, LockupKind as VsrLockUpKind, PositionV0, VotingMintConfig, VotingMintConfigV0};
+use crate::voter_stake_registry::{
+    LockupKind as VsrLockUpKind, LockupTrait, PositionV0, VotingMintConfig, VotingMintConfigV0,
+};
 pub use ::helium_sub_daos::*;
 use anchor_lang::prelude::*;
 use std::cmp::min;
@@ -46,8 +48,8 @@ impl PrecisePosition for PositionV0 {
     ) -> Result<u128> {
         let baseline_vote_weight = (voting_mint_config
             .baseline_vote_weight(self.amount_deposited_native)?)
-            .checked_mul(FALL_RATE_FACTOR)
-            .unwrap();
+        .checked_mul(FALL_RATE_FACTOR)
+        .unwrap();
         let max_locked_vote_weight =
             voting_mint_config.max_extra_lockup_vote_weight(self.amount_deposited_native)?;
         let genesis_multiplier =
@@ -103,15 +105,13 @@ impl PrecisePosition for PositionV0 {
         lockup_saturation_secs: u64,
     ) -> Result<u128> {
         let remaining = min(self.lockup.seconds_left(curr_ts), lockup_saturation_secs);
-        Ok(
-            (max_locked_vote_weight)
-                .checked_mul(remaining as u128)
-                .unwrap()
-                .checked_mul(FALL_RATE_FACTOR)
-                .unwrap()
-                .checked_div(lockup_saturation_secs as u128)
-                .unwrap(),
-        )
+        Ok((max_locked_vote_weight)
+            .checked_mul(remaining as u128)
+            .unwrap()
+            .checked_mul(FALL_RATE_FACTOR)
+            .unwrap()
+            .checked_div(lockup_saturation_secs as u128)
+            .unwrap())
     }
 }
 
@@ -156,7 +156,7 @@ pub fn caclulate_vhnt_info(
                 .checked_sub(1)
                 .unwrap(),
         )
-            .unwrap()
+        .unwrap()
     } else {
         0
     };
@@ -168,7 +168,7 @@ pub fn caclulate_vhnt_info(
                 .checked_sub(position.genesis_end)
                 .unwrap(),
         )
-            .unwrap()
+        .unwrap()
     } else {
         position.lockup.seconds_left(curr_ts)
     };
@@ -194,7 +194,7 @@ pub fn caclulate_vhnt_info(
         vehnt_at_position_end,
         seconds_from_genesis_to_end,
     )
-        .unwrap();
+    .unwrap();
 
     let mut genesis_end_vehnt_correction = 0;
     let mut genesis_end_fall_rate_correction = 0;
@@ -214,11 +214,8 @@ pub fn caclulate_vhnt_info(
         // So add that fall rate back in.
         // Only do this if the genesis end epoch isn't the same as the position end epoch.
         // If these are the same, then the full vehnt at epoch start is already being taken off.
-        let constant = if let VsrLockUpKind::Constant = position.lockup.kind {
-            true
-        } else {
-            false
-        };
+        let constant = matches!(position.lockup.kind, VsrLockUpKind::Constant);
+
         if constant || current_epoch(position.genesis_end) != current_epoch(position.lockup.end_ts)
         {
             // edge case, if the genesis end is _exactly_ the start of the epoch, getting the voting power at the epoch start
@@ -243,7 +240,7 @@ pub fn caclulate_vhnt_info(
                                         .checked_sub(genesis_end_epoch_start_ts)
                                         .unwrap(),
                                 )
-                                    .unwrap(),
+                                .unwrap(),
                             )
                             .unwrap(),
                     )

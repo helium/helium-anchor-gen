@@ -9,11 +9,7 @@ use anchor_lang::prelude::*;
 pub type Result<T> = std::result::Result<T, Error>;
 
 pub trait PositionV0Trait {
-    fn voting_power(
-        &self,
-        voting_mint_config: &VotingMintConfigV0,
-        curr_ts: i64,
-    ) -> Result<u128>;
+    fn voting_power(&self, voting_mint_config: &VotingMintConfigV0, curr_ts: i64) -> Result<u128>;
 
     fn voting_power_locked(
         &self,
@@ -66,11 +62,7 @@ impl PositionV0Trait for PositionV0 {
     // each point in time the lockup should be equivalent to a new lockup
     // made for the remaining time period.
     //
-    fn voting_power(
-        &self,
-        voting_mint_config: &VotingMintConfigV0,
-        curr_ts: i64,
-    ) -> Result<u128> {
+    fn voting_power(&self, voting_mint_config: &VotingMintConfigV0, curr_ts: i64) -> Result<u128> {
         let baseline_vote_weight =
             voting_mint_config.baseline_vote_weight(self.amount_deposited_native)?;
         let max_locked_vote_weight =
@@ -89,10 +81,10 @@ impl PositionV0Trait for PositionV0 {
         )?;
 
         require_gte!(
-      max_locked_vote_weight,
-      locked_vote_weight,
-      VsrError::InternalErrorBadLockupVoteWeight
-    );
+            max_locked_vote_weight,
+            locked_vote_weight,
+            VsrError::InternalErrorBadLockupVoteWeight
+        );
 
         baseline_vote_weight
             .checked_add(locked_vote_weight)
@@ -130,13 +122,11 @@ impl PositionV0Trait for PositionV0 {
         lockup_saturation_secs: u64,
     ) -> Result<u128> {
         let remaining = min(self.lockup.seconds_left(curr_ts), lockup_saturation_secs);
-        Ok(
-            max_locked_vote_weight
-                .checked_mul(remaining as u128)
-                .unwrap()
-                .checked_div(lockup_saturation_secs as u128)
-                .unwrap(),
-        )
+        Ok(max_locked_vote_weight
+            .checked_mul(remaining as u128)
+            .unwrap()
+            .checked_div(lockup_saturation_secs as u128)
+            .unwrap())
     }
 
     fn amount_unlocked(&self, curr_ts: i64) -> u64 {
@@ -148,8 +138,7 @@ impl PositionV0Trait for PositionV0 {
     }
 
     fn amount_locked(&self, curr_ts: i64) -> u64 {
-        self
-            .amount_deposited_native
+        self.amount_deposited_native
             .checked_sub(self.amount_unlocked(curr_ts))
             .unwrap()
     }
