@@ -1,5 +1,5 @@
 {
-  "version": "0.0.5",
+  "version": "0.0.6",
   "name": "hexboosting",
   "instructions": [
     {
@@ -559,6 +559,11 @@
       "code": 6008,
       "name": "NoEmptyPeriods",
       "msg": "Cannot leave a gap in boost periods"
+    },
+    {
+      "code": 6009,
+      "name": "PythPriceFeedStale",
+      "msg": "Pyth price is stale"
     }
   ]
 }
