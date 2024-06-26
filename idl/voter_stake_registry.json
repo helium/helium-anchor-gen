@@ -1,5 +1,5 @@
 {
-  "version": "0.3.1",
+  "version": "0.3.2",
   "name": "voter_stake_registry",
   "instructions": [
     {
@@ -242,7 +242,7 @@
       "accounts": [
         {
           "name": "registrar",
-          "isMut": true,
+          "isMut": false,
           "isSigner": false,
           "relations": [
             "collection"
@@ -841,67 +841,6 @@
       ]
     },
     {
-      "name": "relinquishVoteV0",
-      "accounts": [
-        {
-          "name": "registrar",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "voterWeightRecord",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "governance",
-          "isMut": false,
-          "isSigner": false,
-          "docs": [
-            "Governance account the Proposal is for"
-          ]
-        },
-        {
-          "name": "proposal",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "voterTokenOwnerRecord",
-          "isMut": false,
-          "isSigner": false,
-          "docs": [
-            "TokenOwnerRecord of the voter who cast the original vote"
-          ]
-        },
-        {
-          "name": "voterAuthority",
-          "isMut": false,
-          "isSigner": true,
-          "docs": [
-            "Authority of the voter who cast the original vote",
-            "It can be either governing_token_owner or its delegate and must sign this instruction"
-          ]
-        },
-        {
-          "name": "voteRecord",
-          "isMut": false,
-          "isSigner": false,
-          "docs": [
-            "The account is used to validate that it doesn't exist and if it doesn't then Anchor owner check throws error",
-            "The check is disabled here and performed inside the instruction",
-            "#[account(owner = registrar.governance_program_id)]"
-          ]
-        },
-        {
-          "name": "beneficiary",
-          "isMut": true,
-          "isSigner": false
-        }
-      ],
-      "args": []
-    },
-    {
       "name": "ledgerTransferPositionV0",
       "accounts": [
         {
@@ -987,28 +926,7 @@
           "name": "registrar",
           "isMut": true,
           "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "realm"
-              },
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "registrar"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "Registrar",
-                "path": "registrar.realm_governing_token_mint"
-              }
-            ]
-          },
           "relations": [
-            "realm",
             "realm_authority"
           ]
         },
@@ -1016,19 +934,16 @@
           "name": "realmAuthority",
           "isMut": false,
           "isSigner": true
-        },
-        {
-          "name": "realm",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "governanceProgramId",
-          "isMut": false,
-          "isSigner": false
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "UpdateRegistrarAuthorityArgsV0"
+          }
+        }
+      ]
     },
     {
       "name": "voteV0",
@@ -1306,50 +1221,6 @@
         }
       ],
       "args": []
-    },
-    {
-      "name": "adminCloseNftVoteRecord",
-      "accounts": [
-        {
-          "name": "admin",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
-          "name": "voteRecord",
-          "isMut": true,
-          "isSigner": false,
-          "relations": [
-            "governing_token_owner"
-          ]
-        },
-        {
-          "name": "position",
-          "isMut": true,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "position"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "NftVoteRecord",
-                "path": "vote_record.nft_mint"
-              }
-            ]
-          }
-        },
-        {
-          "name": "governingTokenOwner",
-          "isMut": true,
-          "isSigner": false
-        }
-      ],
-      "args": []
     }
   ],
   "accounts": [
@@ -1394,61 +1265,6 @@
               "Whether this vote has been cleared on the position after proposal expireds"
             ],
             "type": "bool"
-          }
-        ]
-      }
-    },
-    {
-      "name": "MaxVoterWeightRecord",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "realm",
-            "type": "publicKey"
-          },
-          {
-            "name": "governingTokenMint",
-            "type": "publicKey"
-          },
-          {
-            "name": "maxVoterWeight",
-            "type": "u64"
-          },
-          {
-            "name": "maxVoterWeightExpiry",
-            "type": {
-              "option": "u64"
-            }
-          },
-          {
-            "name": "reserved",
-            "type": {
-              "array": [
-                "u8",
-                8
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "NftVoteRecord",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "proposal",
-            "type": "publicKey"
-          },
-          {
-            "name": "nftMint",
-            "type": "publicKey"
-          },
-          {
-            "name": "governingTokenOwner",
-            "type": "publicKey"
           }
         ]
       }
@@ -1566,59 +1382,6 @@
               "vec": {
                 "defined": "VotingMintConfigV0"
               }
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "VoterWeightRecord",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "realm",
-            "type": "publicKey"
-          },
-          {
-            "name": "governingTokenMint",
-            "type": "publicKey"
-          },
-          {
-            "name": "governingTokenOwner",
-            "type": "publicKey"
-          },
-          {
-            "name": "voterWeight",
-            "type": "u64"
-          },
-          {
-            "name": "voterWeightExpiry",
-            "type": {
-              "option": "u64"
-            }
-          },
-          {
-            "name": "weightAction",
-            "type": {
-              "option": {
-                "defined": "VoterWeightAction"
-              }
-            }
-          },
-          {
-            "name": "weightActionTarget",
-            "type": {
-              "option": "publicKey"
-            }
-          },
-          {
-            "name": "reserved",
-            "type": {
-              "array": [
-                "u8",
-                8
-              ]
             }
           }
         ]
@@ -1745,6 +1508,18 @@
       }
     },
     {
+      "name": "UpdateRegistrarAuthorityArgsV0",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          }
+        ]
+      }
+    },
+    {
       "name": "VoteArgsV0",
       "type": {
         "kind": "struct",
@@ -1839,29 +1614,6 @@
           },
           {
             "name": "Constant"
-          }
-        ]
-      }
-    },
-    {
-      "name": "VoterWeightAction",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "CastVote"
-          },
-          {
-            "name": "CommentProposal"
-          },
-          {
-            "name": "CreateGovernance"
-          },
-          {
-            "name": "CreateProposal"
-          },
-          {
-            "name": "SignOffProposal"
           }
         ]
       }
