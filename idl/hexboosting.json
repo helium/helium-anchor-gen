@@ -1,5 +1,5 @@
 {
-  "version": "0.0.5",
+  "version": "0.1.0",
   "name": "hexboosting",
   "instructions": [
     {
@@ -65,29 +65,7 @@
         {
           "name": "boostedHex",
           "isMut": true,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "boosted_hex"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "BoostConfigV0",
-                "path": "boost_config"
-              },
-              {
-                "kind": "arg",
-                "type": {
-                  "defined": "BoostArgsV0"
-                },
-                "path": "args.location"
-              }
-            ]
-          }
+          "isSigner": false
         },
         {
           "name": "systemProgram",
@@ -193,6 +171,40 @@
     },
     {
       "name": "startBoostV0",
+      "accounts": [
+        {
+          "name": "startAuthority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "boostConfig",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "start_authority"
+          ]
+        },
+        {
+          "name": "boostedHex",
+          "isMut": true,
+          "isSigner": false,
+          "relations": [
+            "boost_config"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "StartBoostArgsV0"
+          }
+        }
+      ]
+    },
+    {
+      "name": "startBoostV1",
       "accounts": [
         {
           "name": "startAuthority",
@@ -391,6 +403,47 @@
           }
         ]
       }
+    },
+    {
+      "name": "BoostedHexV1",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "deviceType",
+            "type": {
+              "defined": "DeviceTypeV0"
+            }
+          },
+          {
+            "name": "boostConfig",
+            "type": "publicKey"
+          },
+          {
+            "name": "version",
+            "type": "u32"
+          },
+          {
+            "name": "location",
+            "type": "u64"
+          },
+          {
+            "name": "startTs",
+            "type": "i64"
+          },
+          {
+            "name": "bumpSeed",
+            "type": "u8"
+          },
+          {
+            "name": "boostsByPeriod",
+            "docs": [
+              "Each entry represents the boost multiplier for a given period"
+            ],
+            "type": "bytes"
+          }
+        ]
+      }
     }
   ],
   "types": [
@@ -413,6 +466,12 @@
               "vec": {
                 "defined": "BoostAmountV0"
               }
+            }
+          },
+          {
+            "name": "deviceType",
+            "type": {
+              "defined": "DeviceTypeV0"
             }
           }
         ]
@@ -512,6 +571,26 @@
           }
         ]
       }
+    },
+    {
+      "name": "DeviceTypeV0",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "CbrsIndoor"
+          },
+          {
+            "name": "CbrsOutdoor"
+          },
+          {
+            "name": "WifiIndoor"
+          },
+          {
+            "name": "WifiOutdoor"
+          }
+        ]
+      }
     }
   ],
   "errors": [
@@ -559,6 +638,11 @@
       "code": 6008,
       "name": "NoEmptyPeriods",
       "msg": "Cannot leave a gap in boost periods"
+    },
+    {
+      "code": 6009,
+      "name": "PythPriceFeedStale",
+      "msg": "Pyth price is stale"
     }
   ]
 }
