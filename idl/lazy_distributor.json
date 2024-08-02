@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.0",
   "name": "lazy_distributor",
   "instructions": [
     {
@@ -344,7 +344,7 @@
             },
             {
               "name": "owner",
-              "isMut": false,
+              "isMut": true,
               "isSigner": false,
               "docs": [
                 "TODO: Should this be permissioned? Should the owner have to sign to receive rewards?"
@@ -450,7 +450,7 @@
             },
             {
               "name": "owner",
-              "isMut": false,
+              "isMut": true,
               "isSigner": false,
               "docs": [
                 "TODO: Should this be permissioned? Should the owner have to sign to receive rewards?"
@@ -490,11 +490,6 @@
         },
         {
           "name": "compressionProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
         }
@@ -554,6 +549,171 @@
           }
         }
       ]
+    },
+    {
+      "name": "updateCompressionDestinationV0",
+      "accounts": [
+        {
+          "name": "recipient",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "owner",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "destination",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "merkleTree",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "compressionProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "UpdateCompressionDestinationArgsV0"
+          }
+        }
+      ]
+    },
+    {
+      "name": "updateDestinationV0",
+      "accounts": [
+        {
+          "name": "recipient",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "owner",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "destination",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "recipientMintAccount",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "distributeCustomDestinationV0",
+      "accounts": [
+        {
+          "name": "common",
+          "accounts": [
+            {
+              "name": "payer",
+              "isMut": true,
+              "isSigner": true
+            },
+            {
+              "name": "lazyDistributor",
+              "isMut": false,
+              "isSigner": false,
+              "relations": [
+                "rewards_mint",
+                "rewards_escrow"
+              ]
+            },
+            {
+              "name": "recipient",
+              "isMut": true,
+              "isSigner": false,
+              "relations": [
+                "lazy_distributor"
+              ]
+            },
+            {
+              "name": "rewardsMint",
+              "isMut": false,
+              "isSigner": false
+            },
+            {
+              "name": "rewardsEscrow",
+              "isMut": true,
+              "isSigner": false
+            },
+            {
+              "name": "circuitBreaker",
+              "isMut": true,
+              "isSigner": false,
+              "pda": {
+                "seeds": [
+                  {
+                    "kind": "const",
+                    "type": "string",
+                    "value": "account_windowed_breaker"
+                  },
+                  {
+                    "kind": "account",
+                    "type": "publicKey",
+                    "account": "TokenAccount",
+                    "path": "rewards_escrow"
+                  }
+                ],
+                "programId": {
+                  "kind": "account",
+                  "type": "publicKey",
+                  "path": "circuit_breaker_program"
+                }
+              }
+            },
+            {
+              "name": "owner",
+              "isMut": true,
+              "isSigner": false,
+              "docs": [
+                "TODO: Should this be permissioned? Should the owner have to sign to receive rewards?"
+              ]
+            },
+            {
+              "name": "destinationAccount",
+              "isMut": true,
+              "isSigner": false
+            },
+            {
+              "name": "associatedTokenProgram",
+              "isMut": false,
+              "isSigner": false
+            },
+            {
+              "name": "circuitBreakerProgram",
+              "isMut": false,
+              "isSigner": false
+            },
+            {
+              "name": "systemProgram",
+              "isMut": false,
+              "isSigner": false
+            },
+            {
+              "name": "tokenProgram",
+              "isMut": false,
+              "isSigner": false
+            }
+          ]
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
@@ -631,6 +791,17 @@
           {
             "name": "bumpSeed",
             "type": "u8"
+          },
+          {
+            "name": "reserved",
+            "type": "u64"
+          },
+          {
+            "name": "destination",
+            "docs": [
+              "Pubkey::Default if not being used."
+            ],
+            "type": "publicKey"
           }
         ]
       }
@@ -781,6 +952,45 @@
           {
             "name": "currentRewards",
             "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UpdateCompressionDestinationArgsV0",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "dataHash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "creatorHash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "root",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "index",
+            "type": "u32"
           }
         ]
       }
@@ -1082,6 +1292,11 @@
       "code": 6004,
       "name": "InvalidApproverSignature",
       "msg": "Approver signature required"
+    },
+    {
+      "code": 6005,
+      "name": "CustomDestination",
+      "msg": "This recipient uses a custom destination. Use distribute_custom_destination_v0"
     }
   ]
 }
