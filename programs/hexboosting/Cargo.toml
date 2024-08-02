@@ -1,6 +1,6 @@
 [package]
 name = "hexboosting"
-version = "0.0.6"
+version = "0.1.0"
 edition = "2021"
 authors = ["Louis Thiery <thiery.louis@gmail.com>"]
 license = "Apache-2.0"
