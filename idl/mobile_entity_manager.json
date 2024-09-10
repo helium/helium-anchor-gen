@@ -1,5 +1,5 @@
 {
-  "version": "0.1.2",
+  "version": "0.1.3",
   "name": "mobile_entity_manager",
   "instructions": [
     {
@@ -862,6 +862,10 @@
           {
             "name": "hexboostAuthority",
             "type": "publicKey"
+          },
+          {
+            "name": "incentiveEscrowFundBps",
+            "type": "u16"
           }
         ]
       }
@@ -892,6 +896,10 @@
           {
             "name": "metadataUrl",
             "type": "string"
+          },
+          {
+            "name": "incentiveEscrowFundBps",
+            "type": "u16"
           }
         ]
       }
@@ -970,6 +978,12 @@
             "type": {
               "option": "publicKey"
             }
+          },
+          {
+            "name": "incentiveEscrowFundBps",
+            "type": {
+              "option": "u16"
+            }
           }
         ]
       }
@@ -990,6 +1004,11 @@
       "code": 6002,
       "name": "TreeNotFull",
       "msg": "Cannot swap tree until it is close to full"
+    },
+    {
+      "code": 6003,
+      "name": "InvalidIncentiveEscrowFundBps",
+      "msg": "Incentive escrow fund bps cannot be greater than 100%"
     }
   ]
 }
