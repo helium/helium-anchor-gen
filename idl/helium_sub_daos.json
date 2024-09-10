@@ -1,5 +1,5 @@
 {
-  "version": "0.1.7",
+  "version": "0.1.8",
   "name": "helium_sub_daos",
   "instructions": [
     {
@@ -1779,6 +1779,48 @@
           }
         }
       ]
+    },
+    {
+      "name": "adminSetDcOnboardingFeesPaidEpochInfo",
+      "accounts": [
+        {
+          "name": "dao",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "authority"
+          ]
+        },
+        {
+          "name": "subDao",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "dao"
+          ]
+        },
+        {
+          "name": "subDaoEpochInfo",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "sub_dao"
+          ]
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "AdminSetDcOnboardingFeesPaidEpochInfoArgs"
+          }
+        }
+      ]
     }
   ],
   "accounts": [
@@ -2124,6 +2166,18 @@
           },
           {
             "name": "threshold",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "AdminSetDcOnboardingFeesPaidEpochInfoArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "dcOnboardingFeesPaid",
             "type": "u64"
           }
         ]
