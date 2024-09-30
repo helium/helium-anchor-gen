@@ -644,5 +644,8 @@
       "name": "PythPriceFeedStale",
       "msg": "Pyth price is stale"
     }
-  ]
+  ],
+  "metadata": {
+    "address": "hexbnKYoA2GercNNhHUCCfrTRWrHjT6ujKPXTa5NPqJ"
+  }
 }

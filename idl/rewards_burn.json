@@ -1,0 +1,41 @@
+{
+  "version": "0.0.1",
+  "name": "rewards_burn",
+  "instructions": [
+    {
+      "name": "burnV0",
+      "accounts": [
+        {
+          "name": "burn",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "burn"
+              }
+            ]
+          }
+        },
+        {
+          "name": "tokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    }
+  ]
+}

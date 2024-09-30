@@ -543,5 +543,8 @@
       "name": "InvalidConfig",
       "msg": "Invalid config"
     }
-  ]
+  ],
+  "metadata": {
+    "address": "circAbx64bbsscPbQzZAUvuXpHqrCe6fLMzc2uKXz9g"
+  }
 }

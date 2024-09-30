@@ -729,5 +729,8 @@
       "name": "ArithmeticError",
       "msg": "Error in arithmetic"
     }
-  ]
+  ],
+  "metadata": {
+    "address": "fanqeMu3fw8R4LwKNbahPtYXJsyLL6NXyfe2BqzhfB6"
+  }
 }

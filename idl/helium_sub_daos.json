@@ -1,5 +1,5 @@
 {
-  "version": "0.1.8",
+  "version": "0.1.6",
   "name": "helium_sub_daos",
   "instructions": [
     {
@@ -1745,82 +1745,6 @@
           }
         }
       ]
-    },
-    {
-      "name": "adminSetDcOnboardingFeesPaid",
-      "accounts": [
-        {
-          "name": "dao",
-          "isMut": false,
-          "isSigner": false,
-          "relations": [
-            "authority"
-          ]
-        },
-        {
-          "name": "subDao",
-          "isMut": true,
-          "isSigner": false,
-          "relations": [
-            "dao"
-          ]
-        },
-        {
-          "name": "authority",
-          "isMut": false,
-          "isSigner": true
-        }
-      ],
-      "args": [
-        {
-          "name": "args",
-          "type": {
-            "defined": "AdminSetDcOnboardingFeesPaidArgs"
-          }
-        }
-      ]
-    },
-    {
-      "name": "adminSetDcOnboardingFeesPaidEpochInfo",
-      "accounts": [
-        {
-          "name": "dao",
-          "isMut": false,
-          "isSigner": false,
-          "relations": [
-            "authority"
-          ]
-        },
-        {
-          "name": "subDao",
-          "isMut": false,
-          "isSigner": false,
-          "relations": [
-            "dao"
-          ]
-        },
-        {
-          "name": "subDaoEpochInfo",
-          "isMut": false,
-          "isSigner": false,
-          "relations": [
-            "sub_dao"
-          ]
-        },
-        {
-          "name": "authority",
-          "isMut": false,
-          "isSigner": true
-        }
-      ],
-      "args": [
-        {
-          "name": "args",
-          "type": {
-            "defined": "AdminSetDcOnboardingFeesPaidEpochInfoArgs"
-          }
-        }
-      ]
     }
   ],
   "accounts": [
@@ -2166,30 +2090,6 @@
           },
           {
             "name": "threshold",
-            "type": "u64"
-          }
-        ]
-      }
-    },
-    {
-      "name": "AdminSetDcOnboardingFeesPaidEpochInfoArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "dcOnboardingFeesPaid",
-            "type": "u64"
-          }
-        ]
-      }
-    },
-    {
-      "name": "AdminSetDcOnboardingFeesPaidArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "dcOnboardingFeesPaid",
             "type": "u64"
           }
         ]
@@ -2721,5 +2621,8 @@
       "name": "NoDelegateEndingPosition",
       "msg": "Cannot delegate on a position ending this epoch"
     }
-  ]
+  ],
+  "metadata": {
+    "address": "hdaoVTCqhfHHo75XdAMxBKdUqvq1i5bF23sisBqVgGR"
+  }
 }
