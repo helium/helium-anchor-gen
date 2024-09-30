@@ -28,7 +28,7 @@ jobs:
       max-parallel: 1
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       # the script replaces the json file with a newly downloaded one
       # and updates the version in Cargo.toml
