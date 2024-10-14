@@ -17,7 +17,7 @@
         },
         {
           "name": "netId",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false,
           "relations": [
             "authority"
@@ -80,6 +80,35 @@
           }
         }
       ]
+    },
+    {
+      "name": "removeDevaddrConstraintV0",
+      "accounts": [
+        {
+          "name": "rentRefund",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "netId",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "authority"
+          ]
+        },
+        {
+          "name": "devaddrConstraint",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
     },
     {
       "name": "initializeNetIdV0",
@@ -893,7 +922,7 @@
       }
     },
     {
-      "name": "DevAddrConstraintV0",
+      "name": "DevaddrConstraintV0",
       "type": {
         "kind": "struct",
         "fields": [
@@ -1070,8 +1099,5 @@
       "name": "OrganizationNotApproved",
       "msg": "Organization is not approved"
     }
-  ],
-  "metadata": {
-    "address": "irtjLnjCMmyowq2m3KWqpuFB3M9gdNA9A4t4d6VWmzB"
-  }
+  ]
 }
