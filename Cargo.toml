@@ -15,7 +15,7 @@ members = [
 
 [workspace.dependencies]
 anchor-gen = "0"
-anchor-lang = ">=0.28"
+anchor-lang = "=0.29"
 
 [dependencies]
 anchor-gen = { workspace = true }
