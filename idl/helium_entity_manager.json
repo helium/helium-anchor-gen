@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
   "version": "0.2.11",
-=======
-  "version": "0.2.7",
->>>>>>> 159d5df (WIP)
   "name": "helium_entity_manager",
   "instructions": [
     {
