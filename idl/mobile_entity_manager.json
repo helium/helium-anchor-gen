@@ -1,5 +1,5 @@
 {
-  "version": "0.1.3",
+  "version": "0.1.4",
   "name": "mobile_entity_manager",
   "instructions": [
     {
@@ -811,6 +811,275 @@
           }
         }
       ]
+    },
+    {
+      "name": "initializeIncentiveProgramV0",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "issuingAuthority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "programApproval",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "carrier",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "collection",
+            "merkle_tree",
+            "issuing_authority",
+            "sub_dao"
+          ]
+        },
+        {
+          "name": "collection",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "collectionMetadata",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "metadata"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "path": "token_metadata_program"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Mint",
+                "path": "collection"
+              }
+            ],
+            "programId": {
+              "kind": "account",
+              "type": "publicKey",
+              "path": "token_metadata_program"
+            }
+          }
+        },
+        {
+          "name": "collectionMasterEdition",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "metadata"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "path": "token_metadata_program"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Mint",
+                "path": "collection"
+              },
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "edition"
+              }
+            ],
+            "programId": {
+              "kind": "account",
+              "type": "publicKey",
+              "path": "token_metadata_program"
+            }
+          }
+        },
+        {
+          "name": "entityCreator",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "entity_creator"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "DaoV0",
+                "path": "dao"
+              }
+            ],
+            "programId": {
+              "kind": "account",
+              "type": "publicKey",
+              "path": "helium_entity_manager_program"
+            }
+          }
+        },
+        {
+          "name": "dao",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "subDao",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "dao"
+          ]
+        },
+        {
+          "name": "keyToAsset",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "incentiveEscrowProgram",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "treeAuthority",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "path": "merkle_tree"
+              }
+            ],
+            "programId": {
+              "kind": "account",
+              "type": "publicKey",
+              "path": "bubblegum_program"
+            }
+          }
+        },
+        {
+          "name": "recipient",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "merkleTree",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "bubblegumSigner",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "collection_cpi"
+              }
+            ],
+            "programId": {
+              "kind": "account",
+              "type": "publicKey",
+              "path": "bubblegum_program"
+            }
+          }
+        },
+        {
+          "name": "tokenMetadataProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "logWrapper",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "bubblegumProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "compressionProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "heliumEntityManagerProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "InitializeIncentiveProgramArgsV0"
+          }
+        }
+      ]
+    },
+    {
+      "name": "updateIncentiveProgramV0",
+      "accounts": [
+        {
+          "name": "issuingAuthority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "carrier",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "issuing_authority"
+          ]
+        },
+        {
+          "name": "incentiveEscrowProgram",
+          "isMut": true,
+          "isSigner": false,
+          "relations": [
+            "carrier"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "UpdateIncentiveProgramV0Args"
+          }
+        }
+      ]
     }
   ],
   "accounts": [
@@ -869,6 +1138,38 @@
           }
         ]
       }
+    },
+    {
+      "name": "IncentiveEscrowProgramV0",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "carrier",
+            "type": "publicKey"
+          },
+          {
+            "name": "startTs",
+            "type": "i64"
+          },
+          {
+            "name": "stopTs",
+            "type": "i64"
+          },
+          {
+            "name": "shares",
+            "type": "u32"
+          },
+          {
+            "name": "bumpSeed",
+            "type": "u8"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          }
+        ]
+      }
     }
   ],
   "types": [
@@ -900,6 +1201,36 @@
           {
             "name": "incentiveEscrowFundBps",
             "type": "u16"
+          }
+        ]
+      }
+    },
+    {
+      "name": "InitializeIncentiveProgramArgsV0",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "metadataUrl",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "startTs",
+            "type": "i64"
+          },
+          {
+            "name": "stopTs",
+            "type": "i64"
+          },
+          {
+            "name": "shares",
+            "type": "u32"
           }
         ]
       }
@@ -983,6 +1314,32 @@
             "name": "incentiveEscrowFundBps",
             "type": {
               "option": "u16"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "UpdateIncentiveProgramV0Args",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "startTs",
+            "type": {
+              "option": "i64"
+            }
+          },
+          {
+            "name": "stopTs",
+            "type": {
+              "option": "i64"
+            }
+          },
+          {
+            "name": "shares",
+            "type": {
+              "option": "u32"
             }
           }
         ]
