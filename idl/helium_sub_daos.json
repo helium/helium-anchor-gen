@@ -1,5 +1,5 @@
 {
-  "version": "0.1.8",
+  "version": "0.1.11",
   "name": "helium_sub_daos",
   "instructions": [
     {
@@ -1801,7 +1801,7 @@
         },
         {
           "name": "subDaoEpochInfo",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false,
           "relations": [
             "sub_dao"
@@ -1821,6 +1821,96 @@
           }
         }
       ]
+    },
+    {
+      "name": "switchMobileOpsFund",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "opsFundMobile",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mobileMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "opsFundHnt",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "dao",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "hnt_mint",
+            "authority"
+          ]
+        },
+        {
+          "name": "hntMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "hntCircuitBreaker",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "mint_windowed_breaker"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Mint",
+                "path": "hnt_mint"
+              }
+            ],
+            "programId": {
+              "kind": "account",
+              "type": "publicKey",
+              "path": "circuit_breaker_program"
+            }
+          }
+        },
+        {
+          "name": "circuitBreakerProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
