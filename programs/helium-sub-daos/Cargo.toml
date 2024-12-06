@@ -2,7 +2,6 @@
 name = "helium-sub-daos"
 version = "0.1.8"
 edition = "2021"
-authors = ["Louis Thiery <thiery.louis@gmail.com>"]
 license = "Apache-2.0"
 publish = false
 

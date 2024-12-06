@@ -1010,8 +1010,5 @@
       "name": "InvalidIncentiveEscrowFundBps",
       "msg": "Incentive escrow fund bps cannot be greater than 100%"
     }
-  ],
-  "metadata": {
-    "address": "memMa1HG4odAFmUbGWfPwS1WWfK95k99F2YTkGvyxZr"
-  }
+  ]
 }

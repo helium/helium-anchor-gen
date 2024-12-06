@@ -1228,8 +1228,5 @@
       "name": "NoGenesis",
       "msg": "Genesis endpoints are currently disabled"
     }
-  ],
-  "metadata": {
-    "address": "credMBJhYFzfn7NxBMdU4aUqFggAjgztaCcv2Fo6fPT"
-  }
+  ]
 }

@@ -1,5 +1,5 @@
 {
-  "version": "0.3.2",
+  "version": "0.3.3",
   "name": "voter_stake_registry",
   "instructions": [
     {
@@ -2191,8 +2191,5 @@
       "code": 6059,
       "name": "NoVoteForThisChoice"
     }
-  ],
-  "metadata": {
-    "address": "hvsrNC3NKbcryqDs2DocYHZ9yPKEVzdSjQG6RVtK1s8"
-  }
+  ]
 }
