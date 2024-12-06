@@ -18,10 +18,7 @@
         {
           "name": "netId",
           "isMut": true,
-          "isSigner": false,
-          "relations": [
-            "authority"
-          ]
+          "isSigner": false
         },
         {
           "name": "routingManager",
@@ -38,7 +35,8 @@
           "isSigner": false,
           "relations": [
             "net_id",
-            "routing_manager"
+            "routing_manager",
+            "authority"
           ]
         },
         {
@@ -773,8 +771,7 @@
           "relations": [
             "collection",
             "sub_dao",
-            "iot_mint",
-            "iot_price_oracle"
+            "iot_mint"
           ]
         },
         {
@@ -788,16 +785,6 @@
         {
           "name": "iotMint",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "payerIotAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "iotPriceOracle",
-          "isMut": false,
           "isSigner": false
         },
         {
@@ -1050,7 +1037,7 @@
       "name": "tempBackfillOrganizationDelegate",
       "accounts": [
         {
-          "name": "authority",
+          "name": "payer",
           "isMut": true,
           "isSigner": true
         },
@@ -1096,6 +1083,66 @@
         }
       ],
       "args": []
+    },
+    {
+      "name": "tempBackfillDevaddrConstraint",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "netId",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "routingManager",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "iot_mint"
+          ]
+        },
+        {
+          "name": "organization",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "net_id",
+            "routing_manager"
+          ]
+        },
+        {
+          "name": "iotMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "devaddrConstraint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "TempBackfillDevaddrConstraintArgs"
+          }
+        }
+      ]
     }
   ],
   "accounts": [
@@ -1273,17 +1320,6 @@
           {
             "name": "numBlocks",
             "type": "u32"
-          },
-          {
-            "name": "startAddr",
-            "docs": [
-              "Override the default start address for the devaddr constraint.",
-              "WARNING: This is dangerous and can create unvalidated overlap,",
-              "this should not happen under Helium managed net ids"
-            ],
-            "type": {
-              "option": "u64"
-            }
           }
         ]
       }
@@ -1321,6 +1357,22 @@
       }
     },
     {
+      "name": "TempBackfillDevaddrConstraintArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "numBlocks",
+            "type": "u32"
+          },
+          {
+            "name": "startAddr",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
       "name": "TempBackfillOrganizationArgs",
       "type": {
         "kind": "struct",
@@ -1331,9 +1383,7 @@
           },
           {
             "name": "escrowKeyOverride",
-            "type": {
-              "option": "string"
-            }
+            "type": "string"
           }
         ]
       }
