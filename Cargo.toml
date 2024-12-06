@@ -14,8 +14,8 @@ members = [
 ]
 
 [workspace.dependencies]
-anchor-gen = "0"
-anchor-lang = "=0.29"
+anchor-lang= "=0.29"
+anchor-gen = { git = "https://github.com/ChewingGlass/anchor-gen.git", branch = "master" }
 
 [dependencies]
 anchor-gen = { workspace = true }
