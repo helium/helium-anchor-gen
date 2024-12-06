@@ -1,5 +1,5 @@
 {
-  "version": "0.1.6",
+  "version": "0.1.10",
   "name": "helium_sub_daos",
   "instructions": [
     {
@@ -1745,6 +1745,215 @@
           }
         }
       ]
+    },
+    {
+      "name": "adminSetDcOnboardingFeesPaid",
+      "accounts": [
+        {
+          "name": "dao",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "authority"
+          ]
+        },
+        {
+          "name": "subDao",
+          "isMut": true,
+          "isSigner": false,
+          "relations": [
+            "dao"
+          ]
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "AdminSetDcOnboardingFeesPaidArgs"
+          }
+        }
+      ]
+    },
+    {
+      "name": "adminSetDcOnboardingFeesPaidEpochInfo",
+      "accounts": [
+        {
+          "name": "dao",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "authority"
+          ]
+        },
+        {
+          "name": "subDao",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "dao"
+          ]
+        },
+        {
+          "name": "subDaoEpochInfo",
+          "isMut": true,
+          "isSigner": false,
+          "relations": [
+            "sub_dao"
+          ]
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "AdminSetDcOnboardingFeesPaidEpochInfoArgs"
+          }
+        }
+      ]
+    },
+    {
+      "name": "issueVotingRewardsV0",
+      "accounts": [
+        {
+          "name": "subDao",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "registrar",
+            "vetoken_tracker"
+          ]
+        },
+        {
+          "name": "rentPayer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "vetokenTracker",
+          "isMut": true,
+          "isSigner": false,
+          "relations": [
+            "rewards_mint",
+            "registrar"
+          ]
+        },
+        {
+          "name": "registrar",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "vsrEpochInfo",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "vsr_epoch_info"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "VeTokenTrackerV0",
+                "path": "vetoken_tracker"
+              },
+              {
+                "kind": "arg",
+                "type": {
+                  "defined": "IssueVotingRewardsArgsV0"
+                },
+                "path": "args.epoch"
+              }
+            ]
+          }
+        },
+        {
+          "name": "rewardsMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "rewardsPool",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "payerAta",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "rewardsMintCircuitBreaker",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "mint_windowed_breaker"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Mint",
+                "path": "rewards_mint"
+              }
+            ],
+            "programId": {
+              "kind": "account",
+              "type": "publicKey",
+              "path": "circuit_breaker_program"
+            }
+          }
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "positionVotingRewards",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "circuitBreakerProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "IssueVotingRewardsArgsV0"
+          }
+        }
+      ]
     }
   ],
   "accounts": [
@@ -2067,6 +2276,14 @@
           {
             "name": "activeDeviceAuthority",
             "type": "publicKey"
+          },
+          {
+            "name": "votingRewardsPercent",
+            "type": "u64"
+          },
+          {
+            "name": "vetokenTracker",
+            "type": "publicKey"
           }
         ]
       }
@@ -2090,6 +2307,30 @@
           },
           {
             "name": "threshold",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "AdminSetDcOnboardingFeesPaidEpochInfoArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "dcOnboardingFeesPaid",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "AdminSetDcOnboardingFeesPaidArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "dcOnboardingFeesPaid",
             "type": "u64"
           }
         ]
@@ -2263,6 +2504,18 @@
       }
     },
     {
+      "name": "IssueVotingRewardsArgsV0",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "epoch",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
       "name": "TempUpdateSubDaoEpochInfoArgs",
       "type": {
         "kind": "struct",
@@ -2421,6 +2674,18 @@
           },
           {
             "name": "activeDeviceAuthority",
+            "type": {
+              "option": "publicKey"
+            }
+          },
+          {
+            "name": "votingRewardsPercent",
+            "type": {
+              "option": "u64"
+            }
+          },
+          {
+            "name": "vetokenTracker",
             "type": {
               "option": "publicKey"
             }
@@ -2620,9 +2885,11 @@
       "code": 6016,
       "name": "NoDelegateEndingPosition",
       "msg": "Cannot delegate on a position ending this epoch"
+    },
+    {
+      "code": 6017,
+      "name": "RewardsAlreadyIssued",
+      "msg": "Rewards were already issued"
     }
-  ],
-  "metadata": {
-    "address": "hdaoVTCqhfHHo75XdAMxBKdUqvq1i5bF23sisBqVgGR"
-  }
+  ]
 }
