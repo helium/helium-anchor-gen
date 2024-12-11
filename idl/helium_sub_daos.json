@@ -1,5 +1,5 @@
 {
-  "version": "0.1.8",
+  "version": "0.1.9",
   "name": "helium_sub_daos",
   "instructions": [
     {
@@ -1801,7 +1801,7 @@
         },
         {
           "name": "subDaoEpochInfo",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false,
           "relations": [
             "sub_dao"
