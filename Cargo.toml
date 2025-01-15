@@ -33,4 +33,3 @@ rewards-oracle = { path = "programs/rewards-oracle" }
 treasury-management = { path = "programs/treasury-management" }
 voter-stake-registry = { path = "programs/voter-stake-registry" }
 iot-routing-manager = { path = "programs/iot-routing-manager" }
-

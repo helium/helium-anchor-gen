@@ -726,6 +726,58 @@
       "args": []
     },
     {
+      "name": "updateRoutingManagerV0",
+      "accounts": [
+        {
+          "name": "updateAuthority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "routingManager",
+          "isMut": true,
+          "isSigner": false,
+          "relations": [
+            "update_authority"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "UpdateRoutingManagerArgsV0"
+          }
+        }
+      ]
+    },
+    {
+      "name": "updateNetIdV0",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "netId",
+          "isMut": true,
+          "isSigner": false,
+          "relations": [
+            "authority"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "UpdateNetIdArgsV0"
+          }
+        }
+      ]
+    },
+    {
       "name": "updateOrganizationV0",
       "accounts": [
         {
@@ -1389,14 +1441,60 @@
       }
     },
     {
+      "name": "UpdateNetIdArgsV0",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": {
+              "option": "publicKey"
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "UpdateOrganizationArgsV0",
       "type": {
         "kind": "struct",
         "fields": [
           {
-            "name": "newAuthority",
+            "name": "authority",
             "type": {
               "option": "publicKey"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "UpdateRoutingManagerArgsV0",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "updateAuthority",
+            "type": {
+              "option": "publicKey"
+            }
+          },
+          {
+            "name": "netIdAuthority",
+            "type": {
+              "option": "publicKey"
+            }
+          },
+          {
+            "name": "devaddrPriceUsd",
+            "type": {
+              "option": "u64"
+            }
+          },
+          {
+            "name": "ouiPriceUsd",
+            "type": {
+              "option": "u64"
             }
           }
         ]
