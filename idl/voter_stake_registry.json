@@ -1,5 +1,5 @@
 {
-  "version": "0.3.3",
+  "version": "0.3.5",
   "name": "voter_stake_registry",
   "instructions": [
     {
@@ -527,6 +527,11 @@
       "name": "withdrawV0",
       "accounts": [
         {
+          "name": "positionAuthority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
           "name": "registrar",
           "isMut": false,
           "isSigner": false
@@ -562,13 +567,8 @@
         },
         {
           "name": "positionTokenAccount",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
-        },
-        {
-          "name": "positionAuthority",
-          "isMut": false,
-          "isSigner": true
         },
         {
           "name": "vault",
@@ -586,7 +586,17 @@
           "isSigner": false
         },
         {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
           "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
           "isMut": false,
           "isSigner": false
         }
@@ -1478,6 +1488,22 @@
           "isMut": false,
           "isSigner": false,
           "isOptional": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "tempReleasePositionV0",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "position",
+          "isMut": true,
+          "isSigner": false
         }
       ],
       "args": []
