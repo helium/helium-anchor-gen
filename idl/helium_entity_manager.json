@@ -1,5 +1,5 @@
 {
-  "version": "0.2.11",
+  "version": "0.2.12",
   "name": "helium_entity_manager",
   "instructions": [
     {
@@ -234,11 +234,11 @@
           "isMut": false,
           "isSigner": false,
           "relations": [
-            "dnt_mint"
+            "dao"
           ]
         },
         {
-          "name": "dntMint",
+          "name": "hntMint",
           "isMut": false,
           "isSigner": false
         },
@@ -255,7 +255,10 @@
         {
           "name": "maker",
           "isMut": false,
-          "isSigner": false
+          "isSigner": false,
+          "relations": [
+            "dao"
+          ]
         },
         {
           "name": "makerApproval",
@@ -297,6 +300,14 @@
           "name": "associatedTokenProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "dao",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "hnt_mint"
+          ]
         }
       ],
       "args": []
@@ -3458,6 +3469,160 @@
           }
         }
       ]
+    },
+    {
+      "name": "tempBackfillMobileInfo",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "mobileInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "TempBackfillMobileInfoArgs"
+          }
+        }
+      ]
+    },
+    {
+      "name": "swapMakerStake",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "updateAuthority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "maker",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "dao",
+            "update_authority"
+          ]
+        },
+        {
+          "name": "makerApproval",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "maker_approval"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "RewardableEntityConfigV0",
+                "path": "rewardable_entity_config"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "MakerV0",
+                "path": "maker"
+              }
+            ]
+          }
+        },
+        {
+          "name": "rewardableEntityConfig",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "sub_dao"
+          ]
+        },
+        {
+          "name": "subDao",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "dao",
+            "dnt_mint"
+          ]
+        },
+        {
+          "name": "dao",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "hnt_mint"
+          ]
+        },
+        {
+          "name": "dntMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "hntMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "newStakeSource",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "originalStakeDestination",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "originalStake",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "newEscrow",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
@@ -4207,6 +4372,28 @@
           {
             "name": "maxBufferSize",
             "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TempBackfillMobileInfoArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "location",
+            "type": {
+              "option": "u64"
+            }
+          },
+          {
+            "name": "deploymentInfo",
+            "type": {
+              "option": {
+                "defined": "MobileDeploymentInfoV0"
+              }
+            }
           }
         ]
       }
