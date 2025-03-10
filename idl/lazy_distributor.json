@@ -714,6 +714,27 @@
         }
       ],
       "args": []
+    },
+    {
+      "name": "tempUpdateMatchingDestination",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "originalRecipient",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "recipient",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
