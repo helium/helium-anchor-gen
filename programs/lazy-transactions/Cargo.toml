@@ -2,7 +2,6 @@
 name = "lazy-transactions"
 version = "0.2.0"
 edition = "2021"
-authors = ["Louis Thiery <thiery.louis@gmail.com>"]
 license = "Apache-2.0"
 publish = false
 
