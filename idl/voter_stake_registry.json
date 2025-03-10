@@ -1,5 +1,5 @@
 {
-  "version": "0.3.4",
+  "version": "0.4.0",
   "name": "voter_stake_registry",
   "instructions": [
     {
@@ -527,6 +527,11 @@
       "name": "withdrawV0",
       "accounts": [
         {
+          "name": "positionAuthority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
           "name": "registrar",
           "isMut": false,
           "isSigner": false
@@ -562,13 +567,8 @@
         },
         {
           "name": "positionTokenAccount",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
-        },
-        {
-          "name": "positionAuthority",
-          "isMut": false,
-          "isSigner": true
         },
         {
           "name": "vault",
@@ -586,7 +586,17 @@
           "isSigner": false
         },
         {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
           "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
           "isMut": false,
           "isSigner": false
         }
@@ -1481,6 +1491,355 @@
         }
       ],
       "args": []
+    },
+    {
+      "name": "tempReleasePositionV0",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "position",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "relinquishExpiredProxyVoteV0",
+      "accounts": [
+        {
+          "name": "rentRefund",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "marker",
+          "isMut": true,
+          "isSigner": false,
+          "relations": [
+            "proposal",
+            "rent_refund"
+          ]
+        },
+        {
+          "name": "proposal",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "countProxyVoteV0",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "marker",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "marker"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "PositionV0",
+                "path": "position.mint"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "ProposalV0",
+                "path": "proposal"
+              }
+            ]
+          }
+        },
+        {
+          "name": "registrar",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "voter",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "proxyMarker",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "proxy_marker"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "path": "voter"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "ProposalV0",
+                "path": "proposal"
+              }
+            ]
+          },
+          "relations": [
+            "voter",
+            "proposal"
+          ]
+        },
+        {
+          "name": "position",
+          "isMut": true,
+          "isSigner": false,
+          "relations": [
+            "registrar"
+          ]
+        },
+        {
+          "name": "proxyAssignment",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "voter"
+          ]
+        },
+        {
+          "name": "proposal",
+          "isMut": true,
+          "isSigner": false,
+          "relations": [
+            "proposal_config"
+          ]
+        },
+        {
+          "name": "proposalConfig",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "on_vote_hook",
+            "state_controller"
+          ]
+        },
+        {
+          "name": "stateController",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "onVoteHook",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "proposalProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "proxiedVoteV1",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "marker",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "proxy_marker"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "path": "voter"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "ProposalV0",
+                "path": "proposal"
+              }
+            ]
+          }
+        },
+        {
+          "name": "voter",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "proposal",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "VoteArgsV0"
+          }
+        }
+      ]
+    },
+    {
+      "name": "proxiedRelinquishVoteV1",
+      "accounts": [
+        {
+          "name": "marker",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "proxy_marker"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "path": "voter"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "ProposalV0",
+                "path": "proposal"
+              }
+            ]
+          }
+        },
+        {
+          "name": "voter",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "proposal",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "VoteArgsV0"
+          }
+        }
+      ]
+    },
+    {
+      "name": "tempBackfillProxyMarker",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "marker",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "proxy_marker"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "path": "voter"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "ProposalV0",
+                "path": "proposal"
+              }
+            ]
+          }
+        },
+        {
+          "name": "voter",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "proposal",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "VoteArgsV0"
+          }
+        }
+      ]
     }
   ],
   "accounts": [
@@ -1530,6 +1889,40 @@
           {
             "name": "proxyIndex",
             "type": "u16"
+          },
+          {
+            "name": "rentRefund",
+            "type": "publicKey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ProxyMarkerV0",
+      "docs": [
+        "Marker to indicate that a proxy intends to vote this way on a proposal,",
+        "all votes of proxies are permissionless based on this marker"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "voter",
+            "type": "publicKey"
+          },
+          {
+            "name": "proposal",
+            "type": "publicKey"
+          },
+          {
+            "name": "choices",
+            "type": {
+              "vec": "u16"
+            }
+          },
+          {
+            "name": "bumpSeed",
+            "type": "u8"
           },
           {
             "name": "rentRefund",
@@ -2190,6 +2583,11 @@
     {
       "code": 6059,
       "name": "NoVoteForThisChoice"
+    },
+    {
+      "code": 6060,
+      "name": "NoChangesToCount",
+      "msg": "No changes to count"
     }
   ]
 }
