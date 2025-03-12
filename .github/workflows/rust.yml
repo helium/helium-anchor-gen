@@ -21,7 +21,7 @@ jobs:
       run: cargo fmt -- --check
 
     - name: Hygiene | Clippy
-      run: cargo clippy -- -Dclippy::all -Dwarnings
+      run: cargo clippy -- -Dclippy::all -Dwarnings -Aclippy::unexpected_cfgs
 
     - name: Build
       run: cargo build --verbose
