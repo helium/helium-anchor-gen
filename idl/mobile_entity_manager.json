@@ -1,5 +1,5 @@
 {
-  "version": "0.1.4",
+  "version": "0.2.1",
   "name": "mobile_entity_manager",
   "instructions": [
     {
@@ -69,11 +69,11 @@
           "isMut": false,
           "isSigner": false,
           "relations": [
-            "dnt_mint"
+            "dao"
           ]
         },
         {
-          "name": "dntMint",
+          "name": "hntMint",
           "isMut": false,
           "isSigner": false
         },
@@ -201,6 +201,14 @@
           "name": "rent",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "dao",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "hnt_mint"
+          ]
         }
       ],
       "args": [
@@ -1080,6 +1088,98 @@
           }
         }
       ]
+    },
+    {
+      "name": "swapCarrierStake",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "updateAuthority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "carrier",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "sub_dao",
+            "update_authority"
+          ]
+        },
+        {
+          "name": "subDao",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "dao",
+            "dnt_mint"
+          ]
+        },
+        {
+          "name": "dao",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "hnt_mint"
+          ]
+        },
+        {
+          "name": "dntMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "hntMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "newStakeSource",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "originalStakeDestination",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "originalStake",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "newEscrow",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
