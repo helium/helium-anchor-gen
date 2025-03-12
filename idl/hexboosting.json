@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.0",
   "name": "hexboosting",
   "instructions": [
     {
@@ -14,24 +14,8 @@
           "name": "boostConfig",
           "isMut": false,
           "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "boost_config"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "Mint",
-                "path": "payment_mint"
-              }
-            ]
-          },
           "relations": [
-            "payment_mint",
-            "price_oracle"
+            "dc_mint"
           ]
         },
         {
@@ -48,12 +32,35 @@
           "isSigner": true
         },
         {
-          "name": "priceOracle",
+          "name": "dataCredits",
           "isMut": false,
-          "isSigner": false
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "dc"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Mint",
+                "path": "dc_mint"
+              }
+            ],
+            "programId": {
+              "kind": "account",
+              "type": "publicKey",
+              "path": "data_credits_program"
+            }
+          },
+          "relations": [
+            "dc_mint"
+          ]
         },
         {
-          "name": "paymentMint",
+          "name": "dcMint",
           "isMut": true,
           "isSigner": false
         },
@@ -81,6 +88,11 @@
           "name": "associatedTokenProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "dataCreditsProgram",
+          "isMut": false,
+          "isSigner": false
         }
       ],
       "args": [
@@ -106,7 +118,7 @@
           "isSigner": false,
           "relations": [
             "authority",
-            "dnt_mint"
+            "dao"
           ]
         },
         {
@@ -130,7 +142,7 @@
           "isSigner": false
         },
         {
-          "name": "dntMint",
+          "name": "dcMint",
           "isMut": false,
           "isSigner": false
         },
@@ -149,7 +161,7 @@
                 "kind": "account",
                 "type": "publicKey",
                 "account": "Mint",
-                "path": "dnt_mint"
+                "path": "dc_mint"
               }
             ]
           }
@@ -158,6 +170,14 @@
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "dao",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "dc_mint"
+          ]
         }
       ],
       "args": [
@@ -355,6 +375,10 @@
             "docs": [
               "Authority to start the hex"
             ],
+            "type": "publicKey"
+          },
+          {
+            "name": "dcMint",
             "type": "publicKey"
           }
         ]
@@ -565,6 +589,12 @@
           },
           {
             "name": "priceOracle",
+            "type": {
+              "option": "publicKey"
+            }
+          },
+          {
+            "name": "dcMint",
             "type": {
               "option": "publicKey"
             }
