@@ -1,5 +1,5 @@
 {
-  "version": "0.2.1",
+  "version": "0.3.0",
   "name": "lazy_distributor",
   "instructions": [
     {
@@ -716,6 +716,68 @@
       "args": []
     },
     {
+      "name": "setCurrentRewardsV1",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "lazyDistributor",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "recipient",
+          "isMut": true,
+          "isSigner": false,
+          "relations": [
+            "lazy_distributor"
+          ]
+        },
+        {
+          "name": "sysvarInstructions",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "the supplied Sysvar could be anything else.",
+            "The Instruction Sysvar has not been implemented",
+            "in the Anchor framework yet, so this is the safe approach."
+          ]
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "SetCurrentRewardsArgsV0"
+          }
+        }
+      ]
+    },
+    {
+      "name": "dummyIx",
+      "accounts": [
+        {
+          "name": "dummy",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "dummy2",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "tempUpdateMatchingDestination",
       "accounts": [
         {
@@ -738,6 +800,53 @@
     }
   ],
   "accounts": [
+    {
+      "name": "RemoteTaskTransactionV0",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "verificationHash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "transaction",
+            "type": {
+              "defined": "CompiledTransactionV0"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "SetCurrentRewardsTransactionV0",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "lazyDistributor",
+            "type": "publicKey"
+          },
+          {
+            "name": "oracleIndex",
+            "type": "u16"
+          },
+          {
+            "name": "currentRewards",
+            "type": "u64"
+          },
+          {
+            "name": "asset",
+            "type": "publicKey"
+          }
+        ]
+      }
+    },
     {
       "name": "LazyDistributorV0",
       "type": {
@@ -973,6 +1082,84 @@
           {
             "name": "currentRewards",
             "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CompiledInstructionV0",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "programIdIndex",
+            "docs": [
+              "Index into the transaction keys array indicating the program account that executes this instruction."
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "accounts",
+            "docs": [
+              "Ordered indices into the transaction keys array indicating which accounts to pass to the program."
+            ],
+            "type": "bytes"
+          },
+          {
+            "name": "data",
+            "docs": [
+              "The program input data."
+            ],
+            "type": "bytes"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CompiledTransactionV0",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "numRwSigners",
+            "type": "u8"
+          },
+          {
+            "name": "numRoSigners",
+            "type": "u8"
+          },
+          {
+            "name": "numRw",
+            "type": "u8"
+          },
+          {
+            "name": "accounts",
+            "type": {
+              "vec": "publicKey"
+            }
+          },
+          {
+            "name": "instructions",
+            "type": {
+              "vec": {
+                "defined": "CompiledInstructionV0"
+              }
+            }
+          },
+          {
+            "name": "signerSeeds",
+            "docs": [
+              "Additional signer seeds. Should include bump. Useful for things like initializing a mint where",
+              "you cannot pass a keypair.",
+              "Note that these seeds will be prefixed with \"custom\", task_queue.key",
+              "and the bump you pass and account should be consistent with this. But to save space",
+              "in the instruction, they should be ommitted here. See tests for examples"
+            ],
+            "type": {
+              "vec": {
+                "vec": "bytes"
+              }
+            }
           }
         ]
       }
@@ -1318,6 +1505,36 @@
       "code": 6005,
       "name": "CustomDestination",
       "msg": "This recipient uses a custom destination. Use distribute_custom_destination_v0"
+    },
+    {
+      "code": 6006,
+      "name": "InvalidOracle",
+      "msg": "Invalid oracle"
+    },
+    {
+      "code": 6007,
+      "name": "InvalidLazyDistributor",
+      "msg": "Invalid lazy distributor"
+    },
+    {
+      "code": 6008,
+      "name": "InvalidCurrentRewards",
+      "msg": "Invalid current rewards"
+    },
+    {
+      "code": 6009,
+      "name": "InvalidDiscriminator",
+      "msg": "Invalid discriminator"
+    },
+    {
+      "code": 6010,
+      "name": "SigVerificationFailed",
+      "msg": "Signature verification failed"
+    },
+    {
+      "code": 6011,
+      "name": "DummyInstruction",
+      "msg": "Don't use the dummy instruction"
     }
   ]
 }
