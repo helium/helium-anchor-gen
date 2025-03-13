@@ -1,5 +1,5 @@
 {
-  "version": "0.2.9",
+  "version": "0.2.18",
   "name": "helium_sub_daos",
   "instructions": [
     {
@@ -676,6 +676,36 @@
           "name": "prevSubDaoEpochInfo",
           "isMut": true,
           "isSigner": false
+        },
+        {
+          "name": "notEmittedCounter",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "not_emitted_counter"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Mint",
+                "path": "hnt_mint"
+              }
+            ],
+            "programId": {
+              "kind": "account",
+              "type": "publicKey",
+              "path": "no_emit_program"
+            }
+          }
+        },
+        {
+          "name": "noEmitProgram",
+          "isMut": false,
+          "isSigner": false
         }
       ],
       "args": [
@@ -1343,8 +1373,8 @@
         },
         {
           "name": "positionAuthority",
-          "isMut": true,
-          "isSigner": true
+          "isMut": false,
+          "isSigner": false
         },
         {
           "name": "registrar",
@@ -1353,7 +1383,7 @@
         },
         {
           "name": "dao",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false,
           "relations": [
             "registrar",
@@ -1394,7 +1424,7 @@
         },
         {
           "name": "hntMint",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
@@ -1483,6 +1513,11 @@
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
         }
       ],
       "args": [
@@ -2261,6 +2296,62 @@
         }
       ],
       "args": []
+    },
+    {
+      "name": "tempRemoveMintAndFreezeAuthorities",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "dao",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "hnt_mint",
+            "authority"
+          ]
+        },
+        {
+          "name": "hntMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "iotSubDao",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "dao"
+          ]
+        },
+        {
+          "name": "mobileSubDao",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "dao"
+          ]
+        },
+        {
+          "name": "mobileMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "iotMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
@@ -2416,6 +2507,18 @@
           },
           {
             "name": "vehntAtEpochStart",
+            "type": "u64"
+          },
+          {
+            "name": "cumulativeNotEmitted",
+            "type": "u64"
+          },
+          {
+            "name": "notEmitted",
+            "type": "u64"
+          },
+          {
+            "name": "smoothedHntBurned",
             "type": "u64"
           }
         ]
