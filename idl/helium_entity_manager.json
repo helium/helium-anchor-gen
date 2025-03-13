@@ -1,5 +1,5 @@
 {
-  "version": "0.2.4",
+  "version": "0.2.13",
   "name": "helium_entity_manager",
   "instructions": [
     {
@@ -87,11 +87,11 @@
           "isMut": false,
           "isSigner": false,
           "relations": [
-            "dnt_mint"
+            "dao"
           ]
         },
         {
-          "name": "dntMint",
+          "name": "hntMint",
           "isMut": false,
           "isSigner": false
         },
@@ -108,7 +108,10 @@
         {
           "name": "maker",
           "isMut": false,
-          "isSigner": false
+          "isSigner": false,
+          "relations": [
+            "dao"
+          ]
         },
         {
           "name": "makerApproval",
@@ -150,6 +153,14 @@
           "name": "associatedTokenProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "dao",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "hnt_mint"
+          ]
         }
       ],
       "args": []
@@ -2623,7 +2634,7 @@
         },
         {
           "name": "dataOnlyConfig",
-          "isMut": true,
+          "isMut": false,
           "isSigner": false,
           "pda": {
             "seeds": [
@@ -2996,6 +3007,466 @@
         }
       ],
       "args": []
+    },
+    {
+      "name": "tempStandardizeEntity",
+      "accounts": [
+        {
+          "name": "keyToAsset",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "merkleTree",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "maker",
+          "isMut": true,
+          "isSigner": false,
+          "isOptional": true
+        },
+        {
+          "name": "dataOnlyConfig",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "treeAuthority",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "path": "merkle_tree"
+              }
+            ],
+            "programId": {
+              "kind": "account",
+              "type": "publicKey",
+              "path": "bubblegum_program"
+            }
+          }
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "collection",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "collectionMetadata",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "metadata"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "path": "token_metadata_program"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Mint",
+                "path": "collection"
+              }
+            ],
+            "programId": {
+              "kind": "account",
+              "type": "publicKey",
+              "path": "token_metadata_program"
+            }
+          }
+        },
+        {
+          "name": "leafOwner",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "logWrapper",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "compressionProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "bubblegumProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenMetadataProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "TempStandardizeEntityArgs"
+          }
+        }
+      ]
+    },
+    {
+      "name": "onboardDataOnlyMobileHotspotV0",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "dcFeePayer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "mobileInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "hotspotOwner",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "merkleTree",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "dcBurner",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "dntBurner",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "rewardableEntityConfig",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "sub_dao"
+          ]
+        },
+        {
+          "name": "dataOnlyConfig",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "data_only_config"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "DaoV0",
+                "path": "dao"
+              }
+            ]
+          },
+          "relations": [
+            "merkle_tree",
+            "dao"
+          ]
+        },
+        {
+          "name": "dao",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "dc_mint"
+          ]
+        },
+        {
+          "name": "keyToAsset",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "dao"
+          ]
+        },
+        {
+          "name": "subDao",
+          "isMut": true,
+          "isSigner": false,
+          "relations": [
+            "dao",
+            "dnt_mint"
+          ]
+        },
+        {
+          "name": "dcMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "dntMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "dntPrice",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "dc",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "dc"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Mint",
+                "path": "dc_mint"
+              }
+            ],
+            "programId": {
+              "kind": "account",
+              "type": "publicKey",
+              "path": "data_credits_program"
+            }
+          },
+          "relations": [
+            "dc_mint"
+          ]
+        },
+        {
+          "name": "compressionProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "dataCreditsProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "heliumSubDaosProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "OnboardDataOnlyMobileHotspotArgsV0"
+          }
+        }
+      ]
+    },
+    {
+      "name": "tempBackfillMobileInfo",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "mobileInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "TempBackfillMobileInfoArgs"
+          }
+        }
+      ]
+    },
+    {
+      "name": "swapMakerStake",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "updateAuthority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "maker",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "dao",
+            "update_authority"
+          ]
+        },
+        {
+          "name": "makerApproval",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "maker_approval"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "RewardableEntityConfigV0",
+                "path": "rewardable_entity_config"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "MakerV0",
+                "path": "maker"
+              }
+            ]
+          }
+        },
+        {
+          "name": "rewardableEntityConfig",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "sub_dao"
+          ]
+        },
+        {
+          "name": "subDao",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "dao",
+            "dnt_mint"
+          ]
+        },
+        {
+          "name": "dao",
+          "isMut": false,
+          "isSigner": false,
+          "relations": [
+            "hnt_mint"
+          ]
+        },
+        {
+          "name": "dntMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "hntMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "newStakeSource",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "originalStakeDestination",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "originalStake",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "newEscrow",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
@@ -3281,6 +3752,14 @@
             "type": {
               "defined": "MobileDeviceTypeV0"
             }
+          },
+          {
+            "name": "deploymentInfo",
+            "type": {
+              "option": {
+                "defined": "MobileDeploymentInfoV0"
+              }
+            }
           }
         ]
       }
@@ -3501,6 +3980,51 @@
       }
     },
     {
+      "name": "OnboardDataOnlyMobileHotspotArgsV0",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "dataHash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "creatorHash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "root",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "index",
+            "type": "u32"
+          },
+          {
+            "name": "location",
+            "type": {
+              "option": "u64"
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "OnboardIotHotspotArgsV0",
       "type": {
         "kind": "struct",
@@ -3604,6 +4128,14 @@
             "type": {
               "defined": "MobileDeviceTypeV0"
             }
+          },
+          {
+            "name": "deploymentInfo",
+            "type": {
+              "option": {
+                "defined": "MobileDeploymentInfoV0"
+              }
+            }
           }
         ]
       }
@@ -3648,6 +4180,112 @@
           {
             "name": "maxBufferSize",
             "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TempBackfillMobileInfoArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "location",
+            "type": {
+              "option": "u64"
+            }
+          },
+          {
+            "name": "deploymentInfo",
+            "type": {
+              "option": {
+                "defined": "MobileDeploymentInfoV0"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "MetadataArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "docs": [
+              "The name of the asset"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "symbol",
+            "docs": [
+              "The symbol for the asset"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "uri",
+            "docs": [
+              "URI pointing to JSON representing the asset"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "creators",
+            "type": {
+              "vec": {
+                "defined": "Creator"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Creator",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "address",
+            "type": "publicKey"
+          },
+          {
+            "name": "verified",
+            "type": "bool"
+          },
+          {
+            "name": "share",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TempStandardizeEntityArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "root",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "index",
+            "type": "u32"
+          },
+          {
+            "name": "currentMetadata",
+            "type": {
+              "defined": "MetadataArgs"
+            }
           }
         ]
       }
@@ -3786,6 +4424,14 @@
           {
             "name": "index",
             "type": "u32"
+          },
+          {
+            "name": "deploymentInfo",
+            "type": {
+              "option": {
+                "defined": "MobileDeploymentInfoV0"
+              }
+            }
           }
         ]
       }
@@ -3876,6 +4522,22 @@
       }
     },
     {
+      "name": "RadioInfoV0",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "radioId",
+            "type": "string"
+          },
+          {
+            "name": "elevation",
+            "type": "i32"
+          }
+        ]
+      }
+    },
+    {
       "name": "MobileDeviceTypeV0",
       "type": {
         "kind": "enum",
@@ -3888,6 +4550,9 @@
           },
           {
             "name": "WifiOutdoor"
+          },
+          {
+            "name": "WifiDataOnly"
           }
         ]
       }
@@ -3901,19 +4566,19 @@
             "name": "IotConfig",
             "fields": [
               {
-                "name": "minGain",
+                "name": "min_gain",
                 "type": "i32"
               },
               {
-                "name": "maxGain",
+                "name": "max_gain",
                 "type": "i32"
               },
               {
-                "name": "fullLocationStakingFee",
+                "name": "full_location_staking_fee",
                 "type": "u64"
               },
               {
-                "name": "dataonlyLocationStakingFee",
+                "name": "dataonly_location_staking_fee",
                 "type": "u64"
               }
             ]
@@ -3922,11 +4587,11 @@
             "name": "MobileConfig",
             "fields": [
               {
-                "name": "fullLocationStakingFee",
+                "name": "full_location_staking_fee",
                 "type": "u64"
               },
               {
-                "name": "dataonlyLocationStakingFee",
+                "name": "dataonly_location_staking_fee",
                 "type": "u64"
               }
             ]
@@ -3935,7 +4600,7 @@
             "name": "MobileConfigV1",
             "fields": [
               {
-                "name": "feesByDevice",
+                "name": "fees_by_device",
                 "type": {
                   "vec": {
                     "defined": "DeviceFeesV0"
@@ -3948,7 +4613,7 @@
             "name": "MobileConfigV2",
             "fields": [
               {
-                "name": "feesByDevice",
+                "name": "fees_by_device",
                 "type": {
                   "vec": {
                     "defined": "DeviceFeesV1"
@@ -3970,6 +4635,52 @@
           },
           {
             "name": "UTF8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MobileDeploymentInfoV0",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "WifiInfoV0",
+            "fields": [
+              {
+                "name": "antenna",
+                "type": "u32"
+              },
+              {
+                "name": "elevation",
+                "type": "i32"
+              },
+              {
+                "name": "azimuth",
+                "type": "u16"
+              },
+              {
+                "name": "mechanical_down_tilt",
+                "type": "u16"
+              },
+              {
+                "name": "electrical_down_tilt",
+                "type": "u16"
+              }
+            ]
+          },
+          {
+            "name": "CbrsInfoV0",
+            "fields": [
+              {
+                "name": "radio_infos",
+                "type": {
+                  "vec": {
+                    "defined": "RadioInfoV0"
+                  }
+                }
+              }
+            ]
           }
         ]
       }
