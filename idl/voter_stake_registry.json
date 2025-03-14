@@ -1,5 +1,5 @@
 {
-  "version": "0.4.0",
+  "version": "0.4.1",
   "name": "voter_stake_registry",
   "instructions": [
     {
@@ -997,7 +997,7 @@
         },
         {
           "name": "registrar",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
@@ -1107,7 +1107,7 @@
         },
         {
           "name": "registrar",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
@@ -1283,7 +1283,7 @@
         },
         {
           "name": "registrar",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
@@ -1840,6 +1840,88 @@
           }
         }
       ]
+    },
+    {
+      "name": "clearRecentProposalsV0",
+      "accounts": [
+        {
+          "name": "registrar",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "position",
+          "isMut": true,
+          "isSigner": false,
+          "relations": [
+            "registrar"
+          ]
+        },
+        {
+          "name": "dao",
+          "isMut": false,
+          "isSigner": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "dao"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Registrar",
+                "path": "registrar.realm_governing_token_mint"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "ClearRecentProposalsArgsV0"
+          }
+        }
+      ]
+    },
+    {
+      "name": "tempBackfillRecentProposals",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "registrar",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "position",
+          "isMut": true,
+          "isSigner": false,
+          "relations": [
+            "registrar"
+          ]
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "TempBackfillRecentProposalsArgs"
+          }
+        }
+      ]
     }
   ],
   "accounts": [
@@ -1973,6 +2055,18 @@
           {
             "name": "voteController",
             "type": "publicKey"
+          },
+          {
+            "name": "registrarPaidRent",
+            "type": "u64"
+          },
+          {
+            "name": "recentProposals",
+            "type": {
+              "vec": {
+                "defined": "RecentProposal"
+              }
+            }
           }
         ]
       }
@@ -2055,6 +2149,22 @@
     }
   ],
   "types": [
+    {
+      "name": "ClearRecentProposalsArgsV0",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "ts",
+            "type": "i64"
+          },
+          {
+            "name": "daoBump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
     {
       "name": "ConfigureVotingMintArgsV0",
       "type": {
@@ -2162,6 +2272,22 @@
       }
     },
     {
+      "name": "TempBackfillRecentProposalsArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "recentProposals",
+            "type": {
+              "vec": {
+                "defined": "RecentProposal"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "TransferArgsV0",
       "type": {
         "kind": "struct",
@@ -2227,6 +2353,22 @@
             "type": {
               "defined": "LockupKind"
             }
+          }
+        ]
+      }
+    },
+    {
+      "name": "RecentProposal",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "proposal",
+            "type": "publicKey"
+          },
+          {
+            "name": "ts",
+            "type": "i64"
           }
         ]
       }
