@@ -1,5 +1,5 @@
 {
-  "version": "0.2.12",
+  "version": "0.2.13",
   "name": "helium_entity_manager",
   "instructions": [
     {
@@ -3522,7 +3522,7 @@
         },
         {
           "name": "makerApproval",
-          "isMut": true,
+          "isMut": false,
           "isSigner": false,
           "pda": {
             "seeds": [
@@ -4758,19 +4758,19 @@
             "name": "IotConfig",
             "fields": [
               {
-                "name": "minGain",
+                "name": "min_gain",
                 "type": "i32"
               },
               {
-                "name": "maxGain",
+                "name": "max_gain",
                 "type": "i32"
               },
               {
-                "name": "fullLocationStakingFee",
+                "name": "full_location_staking_fee",
                 "type": "u64"
               },
               {
-                "name": "dataonlyLocationStakingFee",
+                "name": "dataonly_location_staking_fee",
                 "type": "u64"
               }
             ]
@@ -4779,11 +4779,11 @@
             "name": "MobileConfig",
             "fields": [
               {
-                "name": "fullLocationStakingFee",
+                "name": "full_location_staking_fee",
                 "type": "u64"
               },
               {
-                "name": "dataonlyLocationStakingFee",
+                "name": "dataonly_location_staking_fee",
                 "type": "u64"
               }
             ]
@@ -4792,7 +4792,7 @@
             "name": "MobileConfigV1",
             "fields": [
               {
-                "name": "feesByDevice",
+                "name": "fees_by_device",
                 "type": {
                   "vec": {
                     "defined": "DeviceFeesV0"
@@ -4805,7 +4805,7 @@
             "name": "MobileConfigV2",
             "fields": [
               {
-                "name": "feesByDevice",
+                "name": "fees_by_device",
                 "type": {
                   "vec": {
                     "defined": "DeviceFeesV1"
@@ -4852,11 +4852,11 @@
                 "type": "u16"
               },
               {
-                "name": "mechanicalDownTilt",
+                "name": "mechanical_down_tilt",
                 "type": "u16"
               },
               {
-                "name": "electricalDownTilt",
+                "name": "electrical_down_tilt",
                 "type": "u16"
               }
             ]
@@ -4865,7 +4865,7 @@
             "name": "CbrsInfoV0",
             "fields": [
               {
-                "name": "radioInfos",
+                "name": "radio_infos",
                 "type": {
                   "vec": {
                     "defined": "RadioInfoV0"

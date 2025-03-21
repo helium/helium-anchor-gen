@@ -1,5 +1,5 @@
 {
-  "version": "0.2.0",
+  "version": "0.2.3",
   "name": "rewards_oracle",
   "instructions": [
     {
@@ -111,6 +111,76 @@
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "SetCurrentRewardsWrapperArgsV1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "setCurrentRewardsWrapperV2",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "lazyDistributor",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "recipient",
+          "isMut": true,
+          "isSigner": false,
+          "relations": [
+            "lazy_distributor"
+          ]
+        },
+        {
+          "name": "keyToAsset",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "oracleSigner",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "oracle_signer"
+              }
+            ]
+          }
+        },
+        {
+          "name": "lazyDistributorProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "sysvarInstructions",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "the supplied Sysvar could be anything else.",
+            "The Instruction Sysvar has not been implemented",
+            "in the Anchor framework yet, so this is the safe approach."
+          ]
         }
       ],
       "args": [

@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.1.2",
   "name": "circuit_breaker",
   "instructions": [
     {
@@ -285,6 +285,41 @@
           }
         }
       ]
+    },
+    {
+      "name": "removeMintAuthorityV0",
+      "accounts": [
+        {
+          "name": "rentRefund",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "circuitBreaker",
+          "isMut": true,
+          "isSigner": false,
+          "relations": [
+            "authority",
+            "mint"
+          ]
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
