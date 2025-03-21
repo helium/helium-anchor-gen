@@ -2,7 +2,6 @@
 name = "helium-anchor-gen"
 version = "0.1.0"
 edition = "2021"
-authors = ["Louis Thiery <thiery.louis@gmail.com>"]
 license = "Apache-2.0"
 
 [lib]
@@ -33,3 +32,4 @@ price-oracle = { path = "programs/price-oracle" }
 rewards-oracle = { path = "programs/rewards-oracle" }
 treasury-management = { path = "programs/treasury-management" }
 voter-stake-registry = { path = "programs/voter-stake-registry" }
+iot-routing-manager = { path = "programs/iot-routing-manager" }

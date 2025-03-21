@@ -11,6 +11,7 @@ pub use lazy_distributor;
 pub use lazy_transactions;
 pub use mobile_entity_manager;
 pub mod price_oracle;
+pub use iot_routing_manager;
 pub use rewards_oracle;
 pub use treasury_management;
 pub mod voter_stake_registry;

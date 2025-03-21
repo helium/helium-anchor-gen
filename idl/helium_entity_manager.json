@@ -3,6 +3,153 @@
   "name": "helium_entity_manager",
   "instructions": [
     {
+      "name": "swapSharedMerkleTreeV0",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "sharedMerkle",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "treeAuthority",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "SharedMerkleV0",
+                "path": "shared_merkle.merkle_tree"
+              }
+            ],
+            "programId": {
+              "kind": "account",
+              "type": "publicKey",
+              "path": "bubblegum_program"
+            }
+          }
+        },
+        {
+          "name": "newTreeAuthority",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "path": "new_merkle_tree"
+              }
+            ],
+            "programId": {
+              "kind": "account",
+              "type": "publicKey",
+              "path": "bubblegum_program"
+            }
+          }
+        },
+        {
+          "name": "newMerkleTree",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "logWrapper",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "bubblegumProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "compressionProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initializeSharedMerkleV0",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "sharedMerkle",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "treeAuthority",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "path": "merkle_tree"
+              }
+            ],
+            "programId": {
+              "kind": "account",
+              "type": "publicKey",
+              "path": "bubblegum_program"
+            }
+          }
+        },
+        {
+          "name": "merkleTree",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "logWrapper",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "bubblegumProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "compressionProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": "InitializeSharedMerkleArgsV0"
+          }
+        }
+      ]
+    },
+    {
       "name": "initializeRewardableEntityConfigV0",
       "accounts": [
         {
@@ -921,6 +1068,15 @@
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "sharedMerkle",
+          "isMut": true,
+          "isSigner": false,
+          "isOptional": true,
+          "relations": [
+            "merkle_tree"
+          ]
         }
       ],
       "args": [
@@ -3763,6 +3919,30 @@
           }
         ]
       }
+    },
+    {
+      "name": "SharedMerkleV0",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "proofSize",
+            "type": "u8"
+          },
+          {
+            "name": "pricePerMint",
+            "type": "u64"
+          },
+          {
+            "name": "merkleTree",
+            "type": "publicKey"
+          },
+          {
+            "name": "bumpSeed",
+            "type": "u8"
+          }
+        ]
+      }
     }
   ],
   "types": [
@@ -3856,6 +4036,18 @@
           {
             "name": "stakingRequirement",
             "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "InitializeSharedMerkleArgsV0",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "proofSize",
+            "type": "u8"
           }
         ]
       }
